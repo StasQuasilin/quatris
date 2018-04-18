@@ -6,6 +6,10 @@ public class Level : MonoBehaviour {
     public Dictionary<Key2D, bool> matrix = new Dictionary<Key2D, bool>();
     public int minX, maxX, minY, maxY;
 
+    private void Start() {
+        
+    }
+
     public bool Check(Shape shape) {
 
         foreach (var pair in shape.keys) {

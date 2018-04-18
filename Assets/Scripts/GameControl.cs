@@ -47,10 +47,10 @@ public class GameControl : MonoBehaviour {
             sideValue = 0;
         }
         
-        moveShape.Move( fallValue, sideValue );
+        moveShape.Move( sideValue , fallValue );
 
         if (!level.Check(moveShape)) {
-            currentShape.Move( fallValue, sideValue );
+            currentShape.Move( sideValue, fallValue );
         } else {
             level.Add( currentShape );
             UpdateShapes();
@@ -80,7 +80,7 @@ public class GameControl : MonoBehaviour {
 
     void InitNext() {
         nextShape = shapes.RandomShape();
-        nextShape.InitKeys( -nextShape.xSize / 2, nextShape.ySize );
+        nextShape.InitKeys( -nextShape.xSize / 2, -Screen.height / fullCube.height );
     }
 
     void UpdateShapes() {
@@ -97,18 +97,17 @@ public class GameControl : MonoBehaviour {
         GUIStyle style = new GUIStyle();
         style.fontSize = 9;
 
-        if (currentShape != null)
-            foreach (var pair in currentShape.keys) {
-                if (pair.Value) {
-                    Rect re = new Rect(
-                    Camera.main.WorldToScreenPoint( transform.position ).x + pair.Key.X * fullCube.width * scale,
-                    Camera.main.WorldToScreenPoint( transform.position ).y + pair.Key.Y * fullCube.height * scale,
-                    fullCube.width * scale,
-                    fullCube.height * scale );
+        foreach (var pair in currentShape.keys) {
+            if (pair.Value) {
+                Rect re = new Rect(
+                Camera.main.WorldToScreenPoint( transform.position ).x + pair.Key.X * fullCube.width * scale,
+                Camera.main.WorldToScreenPoint( transform.position ).y + pair.Key.Y * fullCube.height * scale,
+                fullCube.width * scale,
+                fullCube.height * scale );
 
-                    GUI.DrawTexture( re, fullCube );
-                }
+                GUI.DrawTexture( re, fullCube );
             }
+        }
 
         foreach (var pair in level.matrix) {
 
