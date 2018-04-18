@@ -10,14 +10,12 @@ public class Shape {
     public bool show = true;
     public int xSize = 4, ySize = 4;
     public bool[] values;
-    public List<Key2D> keys = new List<Key2D>();
+    public Dictionary<Key2D, bool> keys = new Dictionary<Key2D, bool>();
 
     public void InitKeys(int x, int y) {
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
-                if (values[i + j * ySize]) {
-                    keys.Add( new Key2D( x + i, y + j ) );
-                }
+               keys.Add( new Key2D( x + i, y + j ), values[ i + j * ySize ] );
             }
         }
     }
@@ -36,6 +34,12 @@ public class Shape {
         }
     }
 
+    public void Move(int x, int y) {
+        foreach (var pair in keys) {
+            pair.Key.Add( x, y );
+        }
+    }
+
     void InitValues(int x1, int x2, int y1, int y2) {
         
         bool[] temp = new bool[ x2 * y2];
@@ -47,7 +51,7 @@ public class Shape {
 
             for (int i = 0; i < tX; i++) {
                 for (int j = 0; j < tY; j++) {
-                    temp[ i + j * x2 ] = values[ i + j * x2 ];
+                    temp[ i + j * y2 ] = values[ i + j * y2 ];
                 }
             }
         }

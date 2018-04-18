@@ -1,26 +1,18 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class MatrixUtils {
+public class MatrixUtils : MonoBehaviour {
 
     static bool tmp;
     static Key2D k1, k2;
 
-    public static void RotateRight(int n, Dictionary<Key2D, bool> matrix){
+    public static void RotateRight(int s, int n, Dictionary<Key2D, bool> matrix){
 
-        Dictionary<Key2D, bool> temp = matrix;
+        Debug.Log( "Rotate Right" );
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+        for (int i = 0; i < (n) / 2; i++) {
+            for (int j = i; j < n - 1 - i; j++) {
 
-                k1 = new Key2D( i, j );
-                k2 = new Key2D( n - j - 1, i );
-
-                CheckEmpty( matrix, k1 );
-                CheckEmpty( matrix, k2 );
-
-                temp[ k1 ] = matrix[ k2 ];
-
-                /*
                 //tmp = matr[ i ][ j ];
                 k1 = new Key2D( i, j );
                 CheckEmpty( matrix, k1 );
@@ -43,16 +35,44 @@ public class MatrixUtils {
 
                 //matr[ j ][ n - i - 1 ] = tmp;
                 matrix[ k2 ] = tmp;
-                */
             }
         }
-
-        matrix = temp;
     }
 
     public static void RotateLeft(int minX, int maxX, int minY, int maxY, Dictionary<Key2D, bool> matrix) {
-        for (int i = minX; i < maxX; i++) {
-            for (int j = minY; j < maxY; j++) {
+
+        Debug.Log( "<--" );
+
+        for (int i = minX; i < maxX / 2; i++) {
+            for (int j = i; j < maxY - 1 - i; j++) {
+
+                k1 = new Key2D( i, j );
+                CheckEmpty( matrix, k1 );
+                tmp = matrix[ k1 ];
+
+                k2 = new Key2D( maxX - 1 - j, i );
+                CheckEmpty( matrix, k2 );
+                matrix[ k1 ] = matrix[ k2 ];
+
+                k1 = new Key2D( maxY - 1 - i, maxX - 1 - j);
+                CheckEmpty( matrix, k1 );
+                matrix[ k2 ] = matrix[ k1 ];
+
+                k2 = new Key2D( j, maxY - 1 - i );
+                CheckEmpty( matrix, k2 );
+                matrix[ k1 ] = matrix[ k2 ];
+
+                matrix[ k2 ] = tmp;
+            }
+        }
+    }
+
+    public static void RotateRight(int minX, int maxX, int minY, int maxY, Dictionary<Key2D, bool> matrix) {
+
+        Debug.Log( "-->" );
+
+        for (int i = minX; i < maxX / 2; i++) {
+            for (int j = i; j < maxY - 1 - i; j++) {
 
                 k1 = new Key2D( i, j );
                 CheckEmpty( matrix, k1 );
@@ -75,11 +95,12 @@ public class MatrixUtils {
         }
     }
 
-    public static void RotateLeft(int N, Dictionary<Key2D, bool> matrix) {
-        
+    public static void RotateLeft(int S, int N, Dictionary<Key2D, bool> matrix) {
+
+        Debug.Log( "Rotate Left" );
 
         //for (int i = 0; i < n / 2; i++)
-        for (int i = 0; i < N / 2; i++) {
+        for (int i = S; i < (S + N) / 2; i++) {
 
             //for (int j = i; j < n - 1 - i; j++)
             for (int j = i; j < N - 1 - i; j++) {

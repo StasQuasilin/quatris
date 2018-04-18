@@ -1,4 +1,5 @@
 [Ll]ibrary
 [Oo]bj
 [Pp]rogect[Ss]ettings
-.meta
+*.meta
+.vs

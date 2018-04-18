@@ -6,19 +6,18 @@ public class Level : MonoBehaviour {
     public Dictionary<Key2D, bool> matrix = new Dictionary<Key2D, bool>();
     public int minX, maxX, minY, maxY;
 
-    public bool Check(List<Key2D> keys) {
+    public bool Check(Shape shape) {
 
-        foreach (Key2D key in keys) {
-            if (matrix.ContainsKey(key)) {
+        foreach (var pair in shape.keys) {
+            if (matrix.ContainsKey(pair.Key) && matrix[pair.Key]) {
                 return false;
             }
         }
         return true;
     }
-
     public void Add(Shape shape) {
-        foreach (Key2D key in shape.keys) {
-            matrix.Add( key, true );
+        foreach (var pair in shape.keys) {
+            matrix.Add( pair.Key, pair.Value );
         }
 
         CheckSize();
@@ -48,10 +47,29 @@ public class Level : MonoBehaviour {
                 maxY = pair.Key.Y;
             }
         }
+
+        int min = ( minX <= minY ? minX : minY );
+        int max = ( maxX >= maxY ? maxX : maxY );
+
+        for (int i = min; i < max; i++) {
+            for (int j = min; j < max; j++) {
+
+                Key2D key = new Key2D( i, j );
+                if (!matrix.ContainsKey(key)) {
+                    matrix.Add( key, false );
+                }
+            }
+        }
     }
 
     public void Rotate(int value) {
-        MatrixUtils.RotateLeft( minX, maxX, minY, maxY, matrix );
+        if (value == 1) {
+            //MatrixUtils.RotateLeft( ( maxX  <= maxY ? maxX : maxY), ( minX <= minY ? minX : minY ), matrix );
+            MatrixUtils.RotateRight( minX, maxX, minY, maxY, matrix );
+        } else {
+            //(minX <= minY ? minX : minY)
+            MatrixUtils.RotateLeft(minX, maxX, minY, maxY, matrix );
+        }
 
         CheckSize();
     }
