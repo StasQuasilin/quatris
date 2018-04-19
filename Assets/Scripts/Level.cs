@@ -21,7 +21,11 @@ public class Level : MonoBehaviour {
     }
     public void Add(Shape shape) {
         foreach (var pair in shape.keys) {
-            matrix.Add( pair.Key, pair.Value );
+            if (matrix.ContainsKey( pair.Key )) {
+                matrix[ pair.Key ] = pair.Value;
+            } else {
+                matrix.Add( pair.Key, pair.Value );
+            }
         }
 
         CheckSize();

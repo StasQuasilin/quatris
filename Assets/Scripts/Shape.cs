@@ -13,6 +13,8 @@ public class Shape {
     public Dictionary<Key2D, bool> keys = new Dictionary<Key2D, bool>();
 
     public void InitKeys(int x, int y) {
+        keys.Clear();
+
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
                keys.Add( new Key2D( x + i, y + j ), values[ i + j * ySize ] );

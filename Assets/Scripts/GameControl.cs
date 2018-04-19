@@ -93,7 +93,6 @@ public class GameControl : MonoBehaviour {
         Draw();
     }
     void Draw() {
-        Texture2D t;
         GUIStyle style = new GUIStyle();
         style.fontSize = 9;
 
@@ -110,25 +109,24 @@ public class GameControl : MonoBehaviour {
         }
 
         foreach (var pair in level.matrix) {
+            
 
             if (pair.Value) {
-                t = fullCube;
+                Rect re = new Rect(
+                                Camera.main.WorldToScreenPoint( transform.position ).x + pair.Key.X * fullCube.width * scale,
+                                Camera.main.WorldToScreenPoint( transform.position ).y + pair.Key.Y * fullCube.height * scale,
+                                fullCube.width * scale,
+                                fullCube.height * scale );
+
                 style.normal.textColor = Color.white;
-            } else {
-                t = emptyCube;
-                style.normal.textColor = Color.black;
+                GUI.DrawTexture( re, fullCube );
+
+                re.x += 1;
+                re.y += 1;
+                GUI.Label( re, pair.Key.X + ":" + pair.Key.Y, style );
             }
-
-            Rect re = new Rect(
-                Camera.main.WorldToScreenPoint( transform.position ).x + pair.Key.X * t.width * scale,
-                Camera.main.WorldToScreenPoint( transform.position ).y + pair.Key.Y * t.height * scale,
-                t.width * scale,
-                t.height * scale );
-
-            GUI.DrawTexture(re , t );
-            re.x += 1;
-            re.y += 1;
-            GUI.Label( re, pair.Key.X + ":" + pair.Key.Y, style );
+            
+            
         }
     }
 
