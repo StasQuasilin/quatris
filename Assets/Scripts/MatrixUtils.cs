@@ -39,9 +39,9 @@ public class MatrixUtils : MonoBehaviour {
         }
     }
 
-    public static void RotateLeft(int minX, int maxX, int minY, int maxY, Dictionary<Key2D, bool> matrix) {
+    public static void RotateLeft(Dictionary<Key2D, bool> matrix) {
 
-        Debug.Log( "<--" );
+        CheckSize( matrix );
 
         for (int i = minX; i < maxX / 2; i++) {
             for (int j = i; j < maxY - 1 - i; j++) {
@@ -67,9 +67,9 @@ public class MatrixUtils : MonoBehaviour {
         }
     }
 
-    public static void RotateRight(int minX, int maxX, int minY, int maxY, Dictionary<Key2D, bool> matrix) {
+    public static void RotateRight(Dictionary<Key2D, bool> matrix) {
 
-        Debug.Log( "-->" );
+        CheckSize( matrix );
 
         for (int i = minX; i < maxX / 2; i++) {
             for (int j = i; j < maxY - 1 - i; j++) {
@@ -127,6 +127,46 @@ public class MatrixUtils : MonoBehaviour {
 
                 //matr[ n - 1 - j ][ i ] = tmp;
                 matrix[ k2 ] = tmp;
+            }
+        }
+    }
+
+    static public int minX, maxX, minY, maxY;
+    static void CheckSize(Dictionary<Key2D, bool> matrix) {
+
+        minX = int.MaxValue;
+        maxX = int.MinValue;
+        minY = int.MaxValue;
+        maxY = int.MinValue;
+
+        foreach (var pair in matrix) {
+            if (pair.Key.X < minX) {
+                minX = pair.Key.X;
+            }
+
+            if (pair.Key.X > maxX) {
+                maxX = pair.Key.X;
+            }
+
+            if (pair.Key.Y < minY) {
+                minY = pair.Key.Y;
+            }
+
+            if (pair.Key.Y > maxY) {
+                maxY = pair.Key.Y;
+            }
+        }
+
+        int min = ( minX <= minY ? minX : minY );
+        int max = ( maxX >= maxY ? maxX : maxY );
+
+        for (int i = min; i < max; i++) {
+            for (int j = min; j < max; j++) {
+
+                Key2D key = new Key2D( i, j );
+                if (!matrix.ContainsKey( key )) {
+                    matrix.Add( key, false );
+                }
             }
         }
     }

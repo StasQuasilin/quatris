@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class Key2D {
 
-    int x, y;
-    Vector3 value;
+    int x = 0, y = 0;
+    Vector2 value;
     private int hash;
 
     public Key2D(int x, int y) {
-        this.x = x;
-        this.y = y;
 
-        value = new Vector3(x, 0, y);
-        CalcHash();
+        Add( x, y );
+
     }
 
     private void CalcHash() {
@@ -45,13 +43,13 @@ public class Key2D {
     public void Add(int x, int y) {
         this.x += x;
         this.y += y;
-
+        value = new Vector2( x, y );
         CalcHash();
     }
          
 
 
-    public Vector3 Vector {
+    public Vector2 Value {
         get {
             return value;
         }

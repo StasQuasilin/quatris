@@ -61,4 +61,17 @@ public class Shape {
         values = temp;
     }
 
+    Key2D tk;
+    public bool Contain(int x, int y) {
+        tk = new Key2D( x, y );
+        foreach(var pair in keys) {
+
+            if (keys.ContainsKey(tk) && keys[tk]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

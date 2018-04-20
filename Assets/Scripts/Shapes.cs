@@ -4,6 +4,8 @@ using UnityEngine;
 [System.Serializable]
 public class Shapes : MonoBehaviour {
 
+    List<Shape> lastShapes = new List<Shape>();
+
     [SerializeField]
     public List<Shape> shapes = new List<Shape>();
 
@@ -20,7 +22,22 @@ public class Shapes : MonoBehaviour {
     }
 
     public Shape RandomShape() {
-        return shapes[ ( int ) ( Random.value * ( shapes.Count - 1 )) ];
+        Shape s;
+
+        while (lastShapes.Contains( s = RShape() )) ;
+
+        lastShapes.Add( s );
+
+        while (lastShapes.Count > 3) {
+            lastShapes.RemoveAt( 0 );
+        }
+
+        return s;
+
+    }
+
+    Shape RShape() {
+        return shapes[ ( int ) ( Random.value * ( shapes.Count - 1 ) ) ];
     }
 
     public void Clear() {
