@@ -7,6 +7,7 @@ public class Level2 : MonoBehaviour {
     Dictionary<Key2D, bool> levelMatrix = new Dictionary<Key2D, bool>();
 
     public void Add(Dictionary<Key2D, bool> keys) {
+
         foreach(var pair in keys) {
 
             Add( pair.Key, pair.Value );
@@ -15,11 +16,13 @@ public class Level2 : MonoBehaviour {
     }
 
     public void Add(Key2D key, bool value) {
+
         if (levelMatrix.ContainsKey( key )) {
             levelMatrix[ key ] = value;
         } else {
             levelMatrix.Add( key, value );
         }
+
     }
 
     Key2D tempKey;
@@ -30,17 +33,20 @@ public class Level2 : MonoBehaviour {
         return levelMatrix.ContainsKey( tempKey ) && levelMatrix[tempKey];
 
     }
-
+    Dictionary<Key2D, bool> checkedValues = new Dictionary<Key2D, bool>();
     public bool Contain(Dictionary<Key2D, bool> keys, int x, int y) {
 
+        bool result = false;
+
         foreach (var pair in keys) {
+
             tempKey = new Key2D( pair.Key.X + x, pair.Key.Y + y );
 
             if (levelMatrix.ContainsKey(tempKey) && levelMatrix[tempKey]) {
-                return true;
+                result = true;
             }
         }
 
-        return false;
+        return result;
     }
 }

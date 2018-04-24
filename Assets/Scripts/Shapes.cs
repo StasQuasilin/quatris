@@ -28,16 +28,16 @@ public class Shapes : MonoBehaviour {
 
         lastShapes.Add( s );
 
-        while (lastShapes.Count > 3) {
+        while (lastShapes.Count > shapes.Count * 0.25f) {
             lastShapes.RemoveAt( 0 );
         }
-
+        Debug.Log( string.Format( "Get \"{0}\"", s.ToString() ) );
         return s;
 
     }
 
     Shape RShape() {
-        return shapes[ ( int ) ( Random.value * ( shapes.Count - 1 ) ) ];
+        return shapes[ ( int )Mathf.Floor ( Random.value * ( shapes.Count ) ) ];
     }
 
     public void Clear() {

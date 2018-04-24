@@ -17,7 +17,9 @@ public class Shape {
 
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
-               keys.Add( new Key2D( x + i, y + j ), values[ i + j * ySize ] );
+                if (values[ i + j * ySize ]) {
+                    keys.Add( new Key2D( x + i, y + j ), values[ i + j * ySize ] );
+                }
             }
         }
     }
@@ -37,6 +39,7 @@ public class Shape {
     }
 
     public void Move(int x, int y) {
+
         foreach (var pair in keys) {
             pair.Key.Add( x, y );
         }
@@ -64,14 +67,12 @@ public class Shape {
     Key2D tk;
     public bool Contain(int x, int y) {
         tk = new Key2D( x, y );
-        foreach(var pair in keys) {
 
-            if (keys.ContainsKey(tk) && keys[tk]) {
-                return true;
-            }
-        }
+        return keys.ContainsKey( tk ) && keys[ tk ];
+    }
 
-        return false;
+    public override string ToString() {
+        return "Shape " + privateIndex;
     }
 
 }

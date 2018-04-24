@@ -59,27 +59,34 @@ public class GameControl2 : MonoBehaviour {
     }
 
     void InitLevel() {
+
         Shape shape = shapes.RandomShape();
         shape.InitKeys( (fieldW - shape.xSize) / 2, ( int ) ( fieldH * 0.75f ) );
         level.Add( shape.keys );
 
         InitNext();
         ChangeShape();
+
     }
 
     void InitNext() {
+
         next = shapes.RandomShape();
         next.InitKeys( ( fieldW - next.xSize ) / 2, ( - next.ySize) / 2 );
+
     }
 
     void ChangeShape() {
+
         Debug.Log( "Change Shape" );
         current = next;
         InitNext();
+
     }
 
     int sideInput;
     void Update() {
+
         drawMatrix = Input.GetKey( KeyCode.M );
         
         if (current != null) {
@@ -94,26 +101,29 @@ public class GameControl2 : MonoBehaviour {
 
             if (sideInput != 0) {
                 if (!level.Contain( current.keys, sideInput, 0 )) {
+                    Debug.Log( "\tMove: " + current.keys.Count );
                     current.Move( sideInput, 0 );
+                    Debug.Log( "\tAfter move: " + current.keys.Count );
                 }
+            }
+
+            if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                Debug.Log( "\tRotate: " + current.keys.Count );
+                MatrixUtils.Right( current.keys );
+                Debug.Log( "\tAfter rotate: " + current.keys.Count );
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow)) {
 
-                string s = ":> ";
-
-                foreach(var pair in current.keys) {
-                    if (pair.Value) {
-                        s += pair.Key.Value + " ";
-                    }
-                }
-                Debug.Log( s );
-
                 if (!level.Contain(current.keys, 0, 1)) {
                     current.Move( 0, 1 );
+                } else {
+                    level.Add( current.keys );
+                    ChangeShape();
                 }
             }
         }
+
     }
 
     Rect r;
@@ -126,7 +136,7 @@ public class GameControl2 : MonoBehaviour {
 
                 r = new Rect( i * empty.width * scale, j * empty.height * scale, empty.width * scale, empty.height * scale );
 
-                if (level.Contain( i, j ) || current.Contain(i, j) ) {
+                if (level.Contain( i, j ) ) {
 
                     GUI.DrawTexture( r, full );
 
@@ -134,7 +144,7 @@ public class GameControl2 : MonoBehaviour {
 
                 if (drawMatrix) {
                       
-                    if (!level.Contain( current.keys, 0, 0 ) && !current.Contain( i, j )) {
+                    if (!level.Contain( i, j) && !current.Contain( i, j )) {
                         GUI.DrawTexture( r, empty );
                     }
 
@@ -144,6 +154,18 @@ public class GameControl2 : MonoBehaviour {
                     GUI.Label( r, string.Format( "{0}:{1}", i, j ), style );
                     
                 }
+            }
+        }
+
+        foreach (var pair in current.keys) {
+            if (pair.Value) {
+                r = new Rect( pair.Key.X * empty.width * scale, pair.Key.Y * empty.height * scale, empty.width, empty.height );
+                GUI.DrawTexture( r, full );
+
+                r.x += 2;
+                r.y += 2;
+
+                GUI.Label( r, string.Format( "{0}:{1}", pair.Key.X, pair.Key.Y ), style );
             }
         }
     }
