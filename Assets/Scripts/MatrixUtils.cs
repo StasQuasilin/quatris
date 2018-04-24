@@ -3,40 +3,10 @@ using UnityEngine;
 
 public class MatrixUtils : MonoBehaviour {
 
-    static bool tmp;
-    static Key2D k1, k2;
+	static Vector2Int k1, k2;
 
-    public static void RotateLeft(Dictionary<Key2D, bool> matrix) {
-
-        CheckSize( matrix );
-
-        for (int i = minX; i < maxX / 2; i++) {
-            for (int j = i; j < maxY - 1 - i; j++) {
-
-                k1 = new Key2D( i, j );
-
-                tmp = matrix.ContainsKey( k1 );
-
-                k2 = new Key2D( maxX - 1 - j, i );
-                Check(matrix, k2, k1 );
-
-                k1 = new Key2D( maxY - 1 - i, maxX - 1 - j);
-                Check(matrix, k1, k2 );
-
-                k2 = new Key2D( j, maxY - 1 - i );
-                Check( matrix, k2, k1 );
-
-                if (tmp) {
-                    matrix[ k2 ] = tmp;
-                } else {
-                    matrix.Remove( k2 );
-                }
-                
-            }
-        }
-    }
-
-    static void Check(Dictionary<Key2D, bool> matrix, Key2D from, Key2D to) {
+	static void Check(Dictionary<Vector2Int, Color> matrix, Vector2Int from, Vector2Int to) {
+		
         if (matrix.ContainsKey(from)) {
             if (matrix.ContainsKey(to)) {
                 matrix[ to ] = matrix[ from ];
@@ -49,77 +19,48 @@ public class MatrixUtils : MonoBehaviour {
         }
     }
 
-    public static void RotateRight(Dictionary<Key2D, bool> matrix) {
+	static Dictionary<Vector2Int, Color> temp = new Dictionary<Vector2Int, Color>();
 
-        CheckSize( matrix );
-
-        Debug.Log( string.Format( "Rotate right, min X: {0}, max X: {1}, min Y: {2}, max Y {3}", minX, maxX, minY, maxY ) );
-
-        int n = ( maxX >= maxY ? maxX : maxY );
-
-        for (int i = minX; i < n / 2; i++) {
-            for (int j = minY; j < n - 1 - i; j++) {
-
-                k1 = new Key2D( i, j );
-                tmp = matrix.ContainsKey(k1);
-
-                k2 = new Key2D( j, n - 1 - i );
-                Check( matrix, k2, k1 );
-
-                k1 = new Key2D( n - 1 - i, n - 1 - j );
-                Check( matrix, k1, k2 );
-
-                k2 = new Key2D( n - 1 - j, i );
-                Check(matrix, k2, k1 );
-
-                if (tmp) {
-                    matrix[ k2 ] = tmp;
-                } else {
-                    matrix.Remove( k2 );
-                }
-                
-            }
-        }
-    }
-
-    static Dictionary<Key2D, bool> temp = new Dictionary<Key2D, bool>();
-
-    public static void Right(Dictionary<Key2D, bool> matrix) {
+    public static void Right(Dictionary<Vector2Int, Color> matrix) {
 
         CheckSize(matrix);
-        Debug.Log(string.Format("\tRotate: miX:{0}, maX{1}, miY{2}, maY{3}\n\t\tMatrix count:{4}", minX, maxX, minY, maxY, matrix.Count));
+		string mText = "";
+
+		foreach (var pair in matrix) {
+			mText += pair.Key;
+		}
+
+		Debug.Log(string.Format("\tRotate: miX:{0}, maX{1}, miY{2}, maY{3}\n\tMatrix keys:{4}", minX, maxX, minY, maxY, mText));
 
         for (int i = minX; i < maxX +1 ; i++) {
             for (int j = minY; j < maxY +1; j++) {
 
-                k1 = new Key2D( i, j );
-                k2 = new Key2D( maxX - (j - minY), minY + (i - minX) );
+				k1 = new Vector2Int( i, j );
+				k2 = new Vector2Int( maxX - (j - minY), minY + (i - minX) );
 
-                Debug.Log( string.Format( "\'{0}\' -> \'{1}\':{2}", k1.Value, k2.Value, matrix.ContainsKey( k1 ) ) );
+				if (matrix.ContainsKey (k1)) {
+					
+					Debug.Log (string.Format ("\t'{0}\' -> \'{1}\'\n\t-=-=-=-=-=-=-=-", k1, k2));
 
-                if (matrix.ContainsKey( k1 )) {
-
-                    if (temp.ContainsKey( k2 )) {
-                        temp[ k2 ] = matrix[ k1 ];
-                        Debug.Log("\tTemp[ " + k2.Value + " ] = Matrix[ " + k1.Value + " ]");
-                    } else {
-                        temp.Add( k2, matrix[ k1 ] );
-                        Debug.Log( "\tTemp.Add( " + k2.Value + ", " + matrix[ k1 ] );
-                    }
-
-                } else {
-                    Debug.Log( "NO KEY " + k1.Value );
-                }
-                
+					if (!temp.ContainsKey (k2)) {
+						temp.Add (k2, matrix [k1]);
+						Debug.Log ("\t\t#" + k2 + "\n\t\t in temp");
+					} else {
+						Debug.LogError(string.Format("Temp matrix contain key {0}", k2));
+					}
+				} else {
+					Debug.LogError(string.Format("Matrix not contain key {0}", k1));
+				}
             }
         }
         
         matrix.Clear();
         Debug.Log( "\tTemp: " + temp.Count );
         foreach(var p in temp) {
-            if (true) {
-                matrix.Add( p.Key, p.Value );
-            }
+
+			Debug.Log ("Add to matix: " + p.Key);
+            matrix.Add( p.Key, p.Value );
+
         }
 
         temp.Clear();
@@ -127,7 +68,7 @@ public class MatrixUtils : MonoBehaviour {
     }
 
     static public int minX, maxX, minY, maxY;
-    static void CheckSize(Dictionary<Key2D, bool> matrix) {
+    static void CheckSize(Dictionary<Vector2Int, Color> matrix) {
 
         minX = int.MaxValue;
         maxX = int.MinValue;
@@ -135,20 +76,20 @@ public class MatrixUtils : MonoBehaviour {
         maxY = int.MinValue;
 
         foreach (var pair in matrix) {
-            if (pair.Key.X < minX) {
-                minX = pair.Key.X;
+            if (pair.Key.x < minX) {
+                minX = pair.Key.x;
+			} else 
+
+            if (pair.Key.x > maxX) {
+                maxX = pair.Key.x;
             }
 
-            if (pair.Key.X > maxX) {
-                maxX = pair.Key.X;
-            }
+            if (pair.Key.y < minY) {
+                minY = pair.Key.y;
+			} else 
 
-            if (pair.Key.Y < minY) {
-                minY = pair.Key.Y;
-            }
-
-            if (pair.Key.Y > maxY) {
-                maxY = pair.Key.Y;
+            if (pair.Key.y > maxY) {
+                maxY = pair.Key.y;
             }
         }
 
@@ -159,7 +100,7 @@ public class MatrixUtils : MonoBehaviour {
         for (int i = min; i < max; i++) {
             for (int j = min; j < max; j++) {
 
-                Key2D key = new Key2D( i, j );
+                Vector2Int key = new Vector2Int( i, j );
                 if (!matrix.ContainsKey( key )) {
                     matrix.Add( key, false );
                 }
@@ -168,7 +109,7 @@ public class MatrixUtils : MonoBehaviour {
         */
     }
 
-    static void CheckEmpty(Dictionary<Key2D, bool> matrix, Key2D key) {
+    static void CheckEmpty(Dictionary<Vector2Int, bool> matrix, Vector2Int key) {
         if (!matrix.ContainsKey( key )) {
             matrix.Add( key, false );
         }

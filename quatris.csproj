@@ -285,9 +285,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GameControl.cs" />
+    <Compile Include="Assets\Scripts\GameControl2.cs" />
     <Compile Include="Assets\Scripts\Key2D.cs" />
-    <Compile Include="Assets\Scripts\Level.cs" />
+    <Compile Include="Assets\Scripts\Level2.cs" />
     <Compile Include="Assets\Scripts\MatrixUtils.cs" />
     <Compile Include="Assets\Scripts\ScreenRect.cs" />
     <Compile Include="Assets\Scripts\Shape.cs" />

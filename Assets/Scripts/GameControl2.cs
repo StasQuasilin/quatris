@@ -101,16 +101,28 @@ public class GameControl2 : MonoBehaviour {
 
             if (sideInput != 0) {
                 if (!level.Contain( current.keys, sideInput, 0 )) {
-                    Debug.Log( "\tMove: " + current.keys.Count );
+					Debug.Log("###########################################################\n" +
+						"\tMove: " + current.keys.Count );
                     current.Move( sideInput, 0 );
-                    Debug.Log( "\tAfter move: " + current.keys.Count );
+					Debug.Log ("###########################################################\n" +
+						"Keys after move");
+
+					foreach (var pair in current.keys) {
+						Debug.Log ("\t" + pair.Key);
+					}
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                Debug.Log( "\tRotate: " + current.keys.Count );
+                Debug.Log( "###########################################################\n" +
+                	"\tRotate: " + current.keys.Count );
                 MatrixUtils.Right( current.keys );
-                Debug.Log( "\tAfter rotate: " + current.keys.Count );
+
+				Debug.Log ("###########################################################\n" +
+					"Keys after rotate");
+				foreach (var pair in current.keys) {
+					Debug.Log ("\t" + pair.Key);
+				}
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow)) {
@@ -138,7 +150,7 @@ public class GameControl2 : MonoBehaviour {
 
                 if (level.Contain( i, j ) ) {
 
-                    GUI.DrawTexture( r, full );
+					GUI.DrawTexture( r, full );
 
                 }
 
@@ -158,15 +170,15 @@ public class GameControl2 : MonoBehaviour {
         }
 
         foreach (var pair in current.keys) {
-            if (pair.Value) {
-                r = new Rect( pair.Key.X * empty.width * scale, pair.Key.Y * empty.height * scale, empty.width, empty.height );
-                GUI.DrawTexture( r, full );
+            
+            r = new Rect( pair.Key.x * empty.width * scale, pair.Key.y * empty.height * scale, empty.width, empty.height );
+            GUI.DrawTexture( r, full );
 
-                r.x += 2;
-                r.y += 2;
+            r.x += 2;
+            r.y += 2;
 
-                GUI.Label( r, string.Format( "{0}:{1}", pair.Key.X, pair.Key.Y ), style );
-            }
+            GUI.Label( r, string.Format( "{0}:{1}", pair.Key.x, pair.Key.y ), style );
+
         }
     }
 }

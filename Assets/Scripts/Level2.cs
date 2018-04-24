@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Level2 : MonoBehaviour {
 
-    Dictionary<Key2D, bool> levelMatrix = new Dictionary<Key2D, bool>();
+	Dictionary<Vector2Int, Color> levelMatrix = new Dictionary<Vector2Int, Color>();
 
-    public void Add(Dictionary<Key2D, bool> keys) {
+	public void Add(Dictionary<Vector2Int, Color> keys) {
 
         foreach(var pair in keys) {
 
@@ -15,7 +15,7 @@ public class Level2 : MonoBehaviour {
         }
     }
 
-    public void Add(Key2D key, bool value) {
+	public void Add(Vector2Int key, Color value) {
 
         if (levelMatrix.ContainsKey( key )) {
             levelMatrix[ key ] = value;
@@ -25,24 +25,24 @@ public class Level2 : MonoBehaviour {
 
     }
 
-    Key2D tempKey;
+	Vector2Int tempKey;
     public bool Contain(int x, int y) {
 
-        tempKey = new Key2D( x, y );
+		tempKey = new Vector2Int( x, y );
 
-        return levelMatrix.ContainsKey( tempKey ) && levelMatrix[tempKey];
+        return levelMatrix.ContainsKey( tempKey );
 
     }
-    Dictionary<Key2D, bool> checkedValues = new Dictionary<Key2D, bool>();
-    public bool Contain(Dictionary<Key2D, bool> keys, int x, int y) {
+
+	public bool Contain(Dictionary<Vector2Int, Color> keys, int x, int y) {
 
         bool result = false;
 
         foreach (var pair in keys) {
 
-            tempKey = new Key2D( pair.Key.X + x, pair.Key.Y + y );
+			tempKey = new Vector2Int( pair.Key.x + x, pair.Key.y + y );
 
-            if (levelMatrix.ContainsKey(tempKey) && levelMatrix[tempKey]) {
+            if (levelMatrix.ContainsKey(tempKey)) {
                 result = true;
             }
         }
