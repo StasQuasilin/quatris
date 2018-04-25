@@ -18,6 +18,22 @@ public class GameControl2 : MonoBehaviour {
 
     GUIStyle style;
 
+    [System.Serializable]
+    public class Timer {
+        public float speed = 1;
+        float lastSpeed;
+
+        public bool IsTime() {
+            if (Time.time > lastSpeed + speed) {
+                lastSpeed = Time.time;
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public Timer timer;
+
     void Awake() {
         if (level == null) {
             level = GetComponent<Level2>();
@@ -32,6 +48,7 @@ public class GameControl2 : MonoBehaviour {
         }
 
         shapes = FindObjectOfType<Shapes>();
+        timer = new Timer();
 
     }
 
@@ -120,7 +137,7 @@ public class GameControl2 : MonoBehaviour {
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            if (Input.GetKeyDown(KeyCode.DownArrow) || timer.IsTime()) {
 
                 if (!level.Contain(current.keys, 0, 1)) {
                     current.Move( 0, 1 );
