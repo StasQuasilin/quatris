@@ -99,7 +99,7 @@ public class GameControl2 : MonoBehaviour {
                 sideInput = 0;
             }
 
-            if (sideInput != 0) {
+            if (sideInput != 0 && Valid( sideInput )) {
                 if (!level.Contain( current.keys, sideInput, 0 )) {
 					Debug.Log("###########################################################\n" +
 						"\tMove: " + current.keys.Count );
@@ -136,6 +136,15 @@ public class GameControl2 : MonoBehaviour {
         } else if (Input.GetKeyDown(KeyCode.D)) {
             level.Right();
         }
+    }
+
+    bool Valid(int input) {
+        foreach(var pair in current.keys) {
+            if (pair.Key.x + input < 0 || pair.Key.x + input > fieldW - 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     Rect r;

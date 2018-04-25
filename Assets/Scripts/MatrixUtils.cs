@@ -49,23 +49,24 @@ public class MatrixUtils : MonoBehaviour {
 					if (!temp.ContainsKey (k2)) {
 						temp.Add (k2, matrix [k1]);
 						Debug.Log ("\t\t#" + k2 + "\n\t\t in temp");
-					} else {
-						Debug.LogError(string.Format("Temp matrix contain key {0}", k2));
 					}
-				} else {
-					Debug.LogError(string.Format("Matrix not contain key {0}", k1));
-				}
+				} 
             }
         }
         
         matrix.Clear();
-        Debug.Log( "\tTemp: " + temp.Count );
-        foreach(var p in temp) {
+        if (temp.Count > 0) {
+            Debug.Log( "\tTemp: " + temp.Count );
+            foreach (var p in temp) {
 
-			Debug.Log ("Add to matix: " + p.Key);
-            matrix.Add( p.Key, p.Value );
+                Debug.Log( "Add to matix: " + p.Key );
+                matrix.Add( p.Key, p.Value );
 
+            }
+        } else {
+            Debug.LogError( "Temp matrix are empty" );
         }
+        
 
         temp.Clear();
         
