@@ -49,12 +49,8 @@ public class Shape {
     public void Move(int x, int y) {
 
         foreach (var pair in keys) {
-			Vector2Int newKey = new Vector2Int (pair.Key.x + x, pair.Key.y + y);
-
-			if (!keys.ContainsKey(newKey)) {
-				addeds.Add (new KeyValuePair<Vector2Int, Color>(newKey, pair.Value));
-				removas.Add (pair.Key);
-			}
+			addeds.Add (new KeyValuePair<Vector2Int, Color>(new Vector2Int(pair.Key.x + x, pair.Key.y + y), pair.Value));
+			removas.Add (pair.Key);
         }
 
 		while (removas.Count > 0) {

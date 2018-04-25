@@ -49,4 +49,12 @@ public class Level2 : MonoBehaviour {
 
         return result;
     }
+
+    public void Right() {
+        MatrixUtils.Right(levelMatrix);
+    }
+
+    public void Left() {
+        MatrixUtils.Left(levelMatrix);
+    }
 }

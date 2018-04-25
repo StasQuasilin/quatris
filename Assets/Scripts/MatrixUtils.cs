@@ -20,7 +20,11 @@ public class MatrixUtils : MonoBehaviour {
     }
 
 	static Dictionary<Vector2Int, Color> temp = new Dictionary<Vector2Int, Color>();
-
+    public static void Left(Dictionary<Vector2Int, Color> matrix) {
+        Right(matrix);
+        Right(matrix);
+        Right(matrix);
+    }
     public static void Right(Dictionary<Vector2Int, Color> matrix) {
 
         CheckSize(matrix);
@@ -78,7 +82,7 @@ public class MatrixUtils : MonoBehaviour {
         foreach (var pair in matrix) {
             if (pair.Key.x < minX) {
                 minX = pair.Key.x;
-			} else 
+			} 
 
             if (pair.Key.x > maxX) {
                 maxX = pair.Key.x;
@@ -86,7 +90,7 @@ public class MatrixUtils : MonoBehaviour {
 
             if (pair.Key.y < minY) {
                 minY = pair.Key.y;
-			} else 
+			} 
 
             if (pair.Key.y > maxY) {
                 maxY = pair.Key.y;

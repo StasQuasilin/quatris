@@ -114,15 +114,10 @@ public class GameControl2 : MonoBehaviour {
             }
 
             if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                Debug.Log( "###########################################################\n" +
-                	"\tRotate: " + current.keys.Count );
                 MatrixUtils.Right( current.keys );
-
-				Debug.Log ("###########################################################\n" +
-					"Keys after rotate");
-				foreach (var pair in current.keys) {
-					Debug.Log ("\t" + pair.Key);
-				}
+                if (level.Contain(current.keys, 0, 0)) {
+                    MatrixUtils.Left(current.keys);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow)) {
@@ -136,6 +131,11 @@ public class GameControl2 : MonoBehaviour {
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.A)) {
+            level.Left();
+        } else if (Input.GetKeyDown(KeyCode.D)) {
+            level.Right();
+        }
     }
 
     Rect r;
