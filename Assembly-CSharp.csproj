@@ -54,11 +54,13 @@
      <Compile Include="Assets\Scripts\GameControl2.cs" />
      <Compile Include="Assets\Scripts\Level2.cs" />
      <Compile Include="Assets\Scripts\MatrixUtils.cs" />
+     <Compile Include="Assets\Scripts\NextView.cs" />
      <Compile Include="Assets\Scripts\ScreenRect.cs" />
      <Compile Include="Assets\Scripts\Shape.cs" />
      <Compile Include="Assets\Scripts\Shapes.cs" />
      <Compile Include="Assets\Scripts\ShapesEditor.cs" />
      <Compile Include="Assets\Scripts\Vector2Int.cs" />
+     <None Include="Assets\Resources\Fonts\digital-7\readme.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
