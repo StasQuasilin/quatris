@@ -5,16 +5,28 @@ using UnityEngine;
 [RequireComponent(typeof(Level2))]
 public class GameControl2 : MonoBehaviour {
 
-    private bool drawMatrix;
-    public Texture2D full, empty;
+    public Texture2D squar;
     public float scale = 1;
 
     Level2 level;
+    GameUI ui;
     Shapes shapes;
-    Shape next, current;
+    Shape next;
+    GameShape current;
 
-    int fieldW;
-    int fieldH;
+	Scores scores;
+
+    public int fieldW;
+    public int fieldH;
+    public int fieldWight = -1;
+
+    public int FieldCenter {
+        get {
+            return (int)(fieldH * 0.7f);
+        }
+    }
+
+    bool isGame = true;
 
     GUIStyle style;
 
@@ -22,13 +34,24 @@ public class GameControl2 : MonoBehaviour {
     public class Timer {
         public float speed = 1;
         float lastSpeed;
+        private float s;
 
         public bool IsTime() {
-            if (Time.time > lastSpeed + speed) {
+            if (Time.time > lastSpeed + s) {
                 lastSpeed = Time.time;
                 return true;
             }
             return false;
+        }
+
+        public bool Fasta {
+            set {
+                if (value) {
+                    s = 0.1f;
+                } else {
+                    s = speed;
+                }
+            }
         }
     }
 
@@ -48,22 +71,30 @@ public class GameControl2 : MonoBehaviour {
         }
 
         shapes = FindObjectOfType<Shapes>();
+		scores = FindObjectOfType<Scores> ();
+        ui = FindObjectOfType<GameUI>();
+
         timer = new Timer();
 
     }
 
 
     void Start() {
+        if (fieldWight == -1) {
+            fieldW = Screen.width / squar.width;
 
-        fieldW = Screen.width / empty.width;
-
-        if (fieldW % 2 == 0) {
-            fieldW++;
+            if (fieldW % 2 == 0) {
+                fieldW++;
+            }
+        } else {
+            fieldW = fieldWight;
         }
 
-        scale = 1f * Screen.width / ( fieldW * empty.height );
+        
 
-        fieldH = (int)(Screen.height / (empty.height * scale));
+        scale = 1f * Screen.width / ( fieldW * squar.height );
+
+        fieldH = (int)(Screen.height / (squar.height * scale));
 
         
 
@@ -77,9 +108,7 @@ public class GameControl2 : MonoBehaviour {
 
     void InitLevel() {
 
-        Shape shape = shapes.RandomShape();
-        shape.InitKeys( (fieldW - shape.xSize) / 2, ( int ) ( fieldH * 0.75f ) );
-        level.Add( shape.keys );
+        level.Init(shapes.RandomShape());
 
         InitNext();
         ChangeShape();
@@ -89,14 +118,12 @@ public class GameControl2 : MonoBehaviour {
     void InitNext() {
 
         next = shapes.RandomShape();
-        next.InitKeys( ( fieldW - next.xSize ) / 2, ( - next.ySize) / 2 );
 
     }
 
     void ChangeShape() {
 
-        Debug.Log( "Change Shape" );
-        current = next;
+        current = new GameShape(next, fieldW / 2, -next.ySize / 2);
         InitNext();
 
     }
@@ -104,59 +131,81 @@ public class GameControl2 : MonoBehaviour {
     int sideInput;
     void Update() {
 
-        drawMatrix = Input.GetKey( KeyCode.M );
-        
-        if (current != null) {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            isGame = !isGame;
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-                sideInput = -1;
-            } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-                sideInput = 1;
-            } else {
-                sideInput = 0;
-            }
+            ui.IsPause(!isGame);
+        }
 
-            if (sideInput != 0 && Valid( sideInput )) {
-                if (!level.Contain( current.keys, sideInput, 0 )) {
-					Debug.Log("###########################################################\n" +
-						"\tMove: " + current.keys.Count );
-                    current.Move( sideInput, 0 );
-					Debug.Log ("###########################################################\n" +
-						"Keys after move");
+        if (isGame) {
 
-					foreach (var pair in current.keys) {
-						Debug.Log ("\t" + pair.Key);
-					}
-                }
-            }
+            if (current != null) {
 
-            if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                MatrixUtils.Right( current.keys );
-                if (level.Contain(current.keys, 0, 0)) {
-                    MatrixUtils.Left(current.keys);
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow) || timer.IsTime()) {
-
-                if (!level.Contain(current.keys, 0, 1)) {
-                    current.Move( 0, 1 );
+                if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                    sideInput = -1;
+                } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                    sideInput = 1;
                 } else {
-                    level.Add( current.keys );
+                    sideInput = 0;
+                }
+
+                if (sideInput != 0 && Valid(sideInput)) {
+                    if (!level.Contain(current.matrix, sideInput, 0)) {
+                        
+                        current.Move(sideInput, 0);
+                        
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.UpArrow)) {
+
+                    MatrixUtils.Right(current.matrix);
+
+                    if (level.Contain(current.matrix, 0, 0)) {
+                        MatrixUtils.Left(current.matrix);
+                    }
+                }
+
+
+                timer.Fasta = Input.GetKey(KeyCode.DownArrow);
+
+                if (timer.IsTime()) {
+
+                    if (!level.Contain(current.matrix, 0, 1)) {
+                        current.Move(0, 1);
+                    } else {
+                        level.Add(current);
+                        scores.AddScores(current.matrix.Count);
+                        ChangeShape();
+                    }
+                }
+
+                if (UnderFloor()) {
+                    scores.AddScores(-current.matrix.Count * 5);
                     ChangeShape();
                 }
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.A)) {
-            level.Left();
-        } else if (Input.GetKeyDown(KeyCode.D)) {
-            level.Right();
+            if (Input.GetKeyDown(KeyCode.A)) {
+                level.Left();
+            } else if (Input.GetKeyDown(KeyCode.D)) {
+                level.Right();
+            }
         }
     }
 
+    bool UnderFloor() {
+        foreach (var pair in current.matrix) {
+            if (pair.Key.y < fieldH) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     bool Valid(int input) {
-        foreach(var pair in current.keys) {
+        foreach(var pair in current.matrix) {
             if (pair.Key.x + input < 0 || pair.Key.x + input > fieldW - 1) {
                 return false;
             }
@@ -168,43 +217,48 @@ public class GameControl2 : MonoBehaviour {
     bool drawBlack;
     bool drawWhite;
     void OnGUI() {
-        
+
+        GUI.depth = 0;
+
         for(int i = 0; i < fieldW; i++) {
             for (int j = 0; j < fieldH; j++) {
 
-                r = new Rect( i * empty.width * scale, j * empty.height * scale, empty.width * scale, empty.height * scale );
+                r = new Rect( 
+                    i * squar.width * scale, 
+                    j * squar.height * scale, 
+                    squar.width * scale, 
+                    squar.height * scale );
 
                 if (level.Contain( i, j ) ) {
+                    GUI.color = level.Color(i, j);
+					GUI.DrawTexture( r, squar );
 
-					GUI.DrawTexture( r, full );
-
+                    DrawNumbers(r, i, j);
                 }
 
-                if (drawMatrix) {
-                      
-                    if (!level.Contain( i, j) && !current.Contain( i, j )) {
-                        GUI.DrawTexture( r, empty );
-                    }
-
-                    r.x += 2;
-                    r.y += 2;
-
-                    GUI.Label( r, string.Format( "{0}:{1}", i, j ), style );
-                    
-                }
             }
         }
 
-        foreach (var pair in current.keys) {
+		GUI.color = current.shapeColor;
+        foreach (var pair in current.matrix) {
             
-            r = new Rect( pair.Key.x * empty.width * scale, pair.Key.y * empty.height * scale, empty.width, empty.height );
-            GUI.DrawTexture( r, full );
+            r = new Rect( 
+                pair.Key.x * squar.width * scale, 
+                pair.Key.y * squar.height * scale, 
+                squar.width * scale, 
+                squar.height * scale);
 
-            r.x += 2;
-            r.y += 2;
+            GUI.DrawTexture( r, squar );
 
-            GUI.Label( r, string.Format( "{0}:{1}", pair.Key.x, pair.Key.y ), style );
+            DrawNumbers(r, pair.Key.x, pair.Key.y);
 
         }
+    }
+
+    void DrawNumbers(Rect r, int x, int y) {
+        r.x += 2;
+        r.y += 2;
+
+        GUI.Label(r, string.Format("{0}:{1}", x, y ), style);
     }
 }

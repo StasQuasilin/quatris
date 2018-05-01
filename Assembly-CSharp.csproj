@@ -52,13 +52,23 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\GameControl2.cs" />
+     <Compile Include="Assets\Scripts\GameUI.cs" />
+     <Compile Include="Assets\Scripts\Generators\Colorizer.cs" />
+     <Compile Include="Assets\Scripts\Generators\Shapes.cs" />
+     <Compile Include="Assets\Scripts\Generators\ShapesEditor.cs" />
+     <Compile Include="Assets\Scripts\Input\_Input.cs" />
+     <Compile Include="Assets\Scripts\Input\KeyboardInput.cs" />
+     <Compile Include="Assets\Scripts\Input\TouchInput.cs" />
      <Compile Include="Assets\Scripts\Level2.cs" />
+     <Compile Include="Assets\Scripts\LevelView.cs" />
      <Compile Include="Assets\Scripts\MatrixUtils.cs" />
      <Compile Include="Assets\Scripts\NextView.cs" />
+     <Compile Include="Assets\Scripts\Scores.cs" />
      <Compile Include="Assets\Scripts\ScreenRect.cs" />
-     <Compile Include="Assets\Scripts\Shape.cs" />
-     <Compile Include="Assets\Scripts\Shapes.cs" />
-     <Compile Include="Assets\Scripts\ShapesEditor.cs" />
+     <Compile Include="Assets\Scripts\Shapes\GameShape.cs" />
+     <Compile Include="Assets\Scripts\Shapes\LevelShape.cs" />
+     <Compile Include="Assets\Scripts\Shapes\Shape.cs" />
+     <Compile Include="Assets\Scripts\UITEST.cs" />
      <Compile Include="Assets\Scripts\Vector2Int.cs" />
      <None Include="Assets\Resources\Fonts\digital-7\readme.txt" />
  <Reference Include="UnityEngine.UI">

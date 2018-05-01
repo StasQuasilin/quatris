@@ -4,25 +4,73 @@ using UnityEngine;
 
 public class Level2 : MonoBehaviour {
 
-	Dictionary<Vector2Int, Color> levelMatrix = new Dictionary<Vector2Int, Color>();
 
-	public void Add(Dictionary<Vector2Int, Color> keys) {
+	Scores scores;
+    GameControl2 game;
 
-        foreach(var pair in keys) {
+	void Awake() {
+		scores = FindObjectOfType<Scores> ();
+        game = FindObjectOfType<GameControl2>();
+	}
 
-            Add( pair.Key, pair.Value );
+    LevelShape levelShape;
+
+    public void Init(Shape shape) {
+        levelShape = new LevelShape(
+            shape, (game.fieldW - shape.xSize) / 2, game.FieldCenter);
+
+    }
+
+	public void Add(GameShape shape) {
+            
+        levelShape.Add(shape);
+
+        levelShape.Check();
+        Allign();
+        CheckLines();
+    }
+
+    List<Vector2Int> vertKeys = new List<Vector2Int>();
+    List<Vector2Int> horKeys = new List<Vector2Int>();
+
+    void CheckLines() {
+
+        Debug.Log("### CHECK LINES ###");
+
+        bool dropW;
+        //Check Lines
+        for (int i = levelShape.minY; i <= levelShape.maxY; i++) {
+            Debug.Log("\tCheck line " + i);
+            dropW = true;
+            int j = 0 ;
+
+            for (; j < game.fieldW; j++) {
+                if (!levelShape.Contain(j, i)) {
+                    Debug.Log("######## No line " + i);
+                    dropW = false;
+                    break;
+                }
+            }
+
+            if (dropW) {
+                Debug.Log("######## Drop line " + i);
+                scores.AddScores( levelShape.DropLine(i) * 7);
+            }
+
 
         }
     }
 
-	public void Add(Vector2Int key, Color value) {
+    void DropLine(int number) {
 
-        if (levelMatrix.ContainsKey( key )) {
-            levelMatrix[ key ] = value;
-        } else {
-            levelMatrix.Add( key, value );
-        }
+    }
 
+    
+
+    
+
+    public Color Color(int x, int y) {
+        return levelShape.matrix[new Vector2Int(x, y)];
     }
 
 	Vector2Int tempKey;
@@ -30,7 +78,7 @@ public class Level2 : MonoBehaviour {
 
 		tempKey = new Vector2Int( x, y );
 
-        return levelMatrix.ContainsKey( tempKey );
+        return levelShape.matrix.ContainsKey( tempKey );
 
     }
 
@@ -42,7 +90,7 @@ public class Level2 : MonoBehaviour {
 
 			tempKey = new Vector2Int( pair.Key.x + x, pair.Key.y + y );
 
-            if (levelMatrix.ContainsKey(tempKey)) {
+            if (levelShape.matrix.ContainsKey(tempKey)) {
                 result = true;
             }
         }
@@ -51,10 +99,23 @@ public class Level2 : MonoBehaviour {
     }
 
     public void Right() {
-        MatrixUtils.Right(levelMatrix);
+        MatrixUtils.Right(levelShape.matrix);
+        levelShape.Check();
+        Allign();
     }
 
     public void Left() {
-        MatrixUtils.Left(levelMatrix);
+        MatrixUtils.Left(levelShape.matrix);
+        levelShape.Check();
+        Allign();
+    }
+
+    void Allign() {
+
+        int vA = (game.fieldW - (levelShape.minX + levelShape.maxX)) / 2;
+        int hA =  game.FieldCenter - (levelShape.maxY - (levelShape.maxY - levelShape.minY) / 2);
+
+        levelShape.Move(vA, hA);
+
     }
 }

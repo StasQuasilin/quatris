@@ -56,10 +56,8 @@ public class MatrixUtils : MonoBehaviour {
         
         matrix.Clear();
         if (temp.Count > 0) {
-            Debug.Log( "\tTemp: " + temp.Count );
             foreach (var p in temp) {
 
-                Debug.Log( "Add to matix: " + p.Key );
                 matrix.Add( p.Key, p.Value );
 
             }
