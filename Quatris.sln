@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quatris", "Assembly-CSharp.csproj", "{11DD2997-5AE9-7110-A2CB-49F435317EC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quatris", "Assembly-CSharp.csproj", "{7975B73B-F89C-8E65-EFB9-6E15AE91877F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{11DD2997-5AE9-7110-A2CB-49F435317EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11DD2997-5AE9-7110-A2CB-49F435317EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11DD2997-5AE9-7110-A2CB-49F435317EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11DD2997-5AE9-7110-A2CB-49F435317EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7975B73B-F89C-8E65-EFB9-6E15AE91877F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7975B73B-F89C-8E65-EFB9-6E15AE91877F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7975B73B-F89C-8E65-EFB9-6E15AE91877F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7975B73B-F89C-8E65-EFB9-6E15AE91877F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
