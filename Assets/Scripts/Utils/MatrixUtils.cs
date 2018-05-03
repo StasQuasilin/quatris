@@ -54,8 +54,10 @@ public class MatrixUtils : MonoBehaviour {
             }
         }
         
-        matrix.Clear();
+        
         if (temp.Count > 0) {
+            matrix.Clear();
+
             foreach (var p in temp) {
 
                 matrix.Add( p.Key, p.Value );
@@ -64,7 +66,6 @@ public class MatrixUtils : MonoBehaviour {
         } else {
             Debug.LogError( "Temp matrix are empty" );
         }
-        
 
         temp.Clear();
         

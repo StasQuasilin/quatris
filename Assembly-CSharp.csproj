@@ -50,13 +50,11 @@
      <Compile Include="Assets\Scripts\GameUI.cs" />
      <Compile Include="Assets\Scripts\Generators\Colorizer.cs" />
      <Compile Include="Assets\Scripts\Generators\Shapes.cs" />
-     <Compile Include="Assets\Scripts\Generators\ShapesEditor.cs" />
+     <Compile Include="Assets\Scripts\Input\IInput.cs" />
      <Compile Include="Assets\Scripts\Input\KeyboardInput.cs" />
      <Compile Include="Assets\Scripts\Input\TouchInput.cs" />
-     <Compile Include="Assets\Scripts\Input\_Input.cs" />
      <Compile Include="Assets\Scripts\Level2.cs" />
      <Compile Include="Assets\Scripts\LevelView.cs" />
-     <Compile Include="Assets\Scripts\MatrixUtils.cs" />
      <Compile Include="Assets\Scripts\NextView.cs" />
      <Compile Include="Assets\Scripts\Scores.cs" />
      <Compile Include="Assets\Scripts\ScreenRect.cs" />
@@ -64,6 +62,8 @@
      <Compile Include="Assets\Scripts\Shapes\LevelShape.cs" />
      <Compile Include="Assets\Scripts\Shapes\Shape.cs" />
      <Compile Include="Assets\Scripts\UITEST.cs" />
+     <Compile Include="Assets\Scripts\Utils\DataIO.cs" />
+     <Compile Include="Assets\Scripts\Utils\MatrixUtils.cs" />
      <Compile Include="Assets\Scripts\Vector2Int.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

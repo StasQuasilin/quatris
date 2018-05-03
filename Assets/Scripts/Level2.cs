@@ -7,10 +7,14 @@ public class Level2 : MonoBehaviour {
 
 	Scores scores;
     GameControl2 game;
+    DataIO io;
 
 	void Awake() {
 		scores = FindObjectOfType<Scores> ();
         game = FindObjectOfType<GameControl2>();
+        io = new DataIO( Application.dataPath + "\\data.t" );
+        
+
 	}
 
     LevelShape levelShape;
@@ -18,7 +22,16 @@ public class Level2 : MonoBehaviour {
     public void Init(Shape shape) {
         levelShape = new LevelShape(
             shape, (game.fieldW - shape.xSize) / 2, game.FieldCenter);
+        levelShape.Check();
+        Allign();
+    }
 
+    public void LoadData() {
+        levelShape = new LevelShape(io.Load());
+    }
+
+    public void SaveData() {
+        io.Save( levelShape.matrix );
     }
 
 	public void Add(GameShape shape) {
@@ -27,11 +40,19 @@ public class Level2 : MonoBehaviour {
 
         levelShape.Check();
         Allign();
-        CheckLines();
+        CalcScores();
+        CalcScores();
     }
 
-    List<Vector2Int> vertKeys = new List<Vector2Int>();
-    List<Vector2Int> horKeys = new List<Vector2Int>();
+    void CalcScores() {
+
+        for (int i = 0; i < 4; i++) {
+            CheckLines();
+            Right();
+            levelShape.Check();
+            Allign();
+        }
+    }
 
     void CheckLines() {
 
@@ -39,7 +60,7 @@ public class Level2 : MonoBehaviour {
 
         bool dropW;
         //Check Lines
-        for (int i = levelShape.minY; i <= levelShape.maxY; i++) {
+        for (int i = levelShape.minY; i <= levelShape.maxY; ) {
             Debug.Log("\tCheck line " + i);
             dropW = true;
             int j = 0 ;
@@ -55,19 +76,11 @@ public class Level2 : MonoBehaviour {
             if (dropW) {
                 Debug.Log("######## Drop line " + i);
                 scores.AddScores( levelShape.DropLine(i) * 7);
+            } else {
+                i++;
             }
-
-
         }
     }
-
-    void DropLine(int number) {
-
-    }
-
-    
-
-    
 
     public Color Color(int x, int y) {
         return levelShape.matrix[new Vector2Int(x, y)];
@@ -115,7 +128,13 @@ public class Level2 : MonoBehaviour {
         int vA = (game.fieldW - (levelShape.minX + levelShape.maxX)) / 2;
         int hA =  game.FieldCenter - (levelShape.maxY - (levelShape.maxY - levelShape.minY) / 2);
 
-        levelShape.Move(vA, hA);
+        levelShape.TotalMove(vA, hA);
 
+    }
+
+    public bool Empty {
+        get {
+            return levelShape == null || levelShape.matrix.Count == 0;
+        }
     }
 }

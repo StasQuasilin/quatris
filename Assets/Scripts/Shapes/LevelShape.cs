@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelShape : GameShape {
+    private Dictionary<Vector2Int, Color> dictionary;
+
+    public LevelShape(Dictionary<Vector2Int, Color> dictionary) {
+        this.dictionary = dictionary;
+    }
 
     public LevelShape(Shape shape, int x, int y) : base(shape, x, y) {
 
@@ -29,6 +34,14 @@ public class LevelShape : GameShape {
                 matrix.Remove(check);
             }
         }
+
+        foreach (var pair in matrix) {
+            if (pair.Key.y < line) {
+                Move( pair, 0, 1 );
+            }
+        }
+
+        UpdateMatrix();
 
         return result;
     }

@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Level2))]
 public class GameControl2 : MonoBehaviour {
 
     public Texture2D squar;
     public float scale = 1;
+
+    IInput input;
 
     Level2 level;
     GameUI ui;
@@ -19,6 +19,7 @@ public class GameControl2 : MonoBehaviour {
     public int fieldW;
     public int fieldH;
     public int fieldWight = -1;
+    public int scoresSteep = 10;
 
     public int FieldCenter {
         get {
@@ -32,7 +33,9 @@ public class GameControl2 : MonoBehaviour {
 
     [System.Serializable]
     public class Timer {
-        public float speed = 1;
+        public int level = 1;
+        public int maxLevel = 10;
+
         float lastSpeed;
         private float s;
 
@@ -47,9 +50,9 @@ public class GameControl2 : MonoBehaviour {
         public bool Fasta {
             set {
                 if (value) {
-                    s = 0.1f;
+                    s = 0.05f;
                 } else {
-                    s = speed;
+                    s = 1 - (1f * level / maxLevel);
                 }
             }
         }
@@ -71,9 +74,12 @@ public class GameControl2 : MonoBehaviour {
         }
 
         shapes = FindObjectOfType<Shapes>();
-		scores = FindObjectOfType<Scores> ();
+        scores = FindObjectOfType<Scores>();
         ui = FindObjectOfType<GameUI>();
 
+#if ( UNITY_EDITOR )
+        input = gameObject.AddComponent<KeyboardInput>();
+#endif
         timer = new Timer();
 
     }
@@ -101,9 +107,6 @@ public class GameControl2 : MonoBehaviour {
         style = new GUIStyle();
         style.fontSize = 9;
         style.normal.textColor = Color.gray;
-
-        InitLevel();
-
     }
 
     void InitLevel() {
@@ -135,15 +138,32 @@ public class GameControl2 : MonoBehaviour {
             isGame = !isGame;
 
             ui.IsPause(!isGame);
+
+            if (!isGame) {
+                level.SaveData();
+            }
         }
 
         if (isGame) {
 
+            if (level.Empty) {
+                InitLevel();
+            }
+
+            int targetLevel = ( int ) ( Mathf.Floor( scores.scores / scoresSteep ) ) + 1;
+            
+            targetLevel = Mathf.Clamp( targetLevel, 1, timer.maxLevel );
+
+            if (targetLevel != timer.level) {
+                timer.level = targetLevel;
+                scores.LevelUp( targetLevel );
+            }
+
             if (current != null) {
 
-                if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                if (input.ShapeLeft()) {
                     sideInput = -1;
-                } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                } else if (input.ShapeRight()) {
                     sideInput = 1;
                 } else {
                     sideInput = 0;
@@ -152,12 +172,12 @@ public class GameControl2 : MonoBehaviour {
                 if (sideInput != 0 && Valid(sideInput)) {
                     if (!level.Contain(current.matrix, sideInput, 0)) {
                         
-                        current.Move(sideInput, 0);
+                        current.TotalMove(sideInput, 0);
                         
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                if (input.ShapeRotate()) {
 
                     MatrixUtils.Right(current.matrix);
 
@@ -167,12 +187,12 @@ public class GameControl2 : MonoBehaviour {
                 }
 
 
-                timer.Fasta = Input.GetKey(KeyCode.DownArrow);
+                timer.Fasta = input.ShapeFall();
 
                 if (timer.IsTime()) {
 
                     if (!level.Contain(current.matrix, 0, 1)) {
-                        current.Move(0, 1);
+                        current.TotalMove(0, 1);
                     } else {
                         level.Add(current);
                         scores.AddScores(current.matrix.Count);
@@ -186,9 +206,9 @@ public class GameControl2 : MonoBehaviour {
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.A)) {
+            if (input.LevelLeft()) {
                 level.Left();
-            } else if (Input.GetKeyDown(KeyCode.D)) {
+            } else if (input.LevelRight()) {
                 level.Right();
             }
         }
@@ -218,47 +238,49 @@ public class GameControl2 : MonoBehaviour {
     bool drawWhite;
     void OnGUI() {
 
-        GUI.depth = 0;
+        if (isGame) {
+            for (int i = 0; i < fieldW; i++) {
+                for (int j = 0; j < fieldH; j++) {
 
-        for(int i = 0; i < fieldW; i++) {
-            for (int j = 0; j < fieldH; j++) {
+                    r = new Rect(
+                        i * squar.width * scale,
+                        j * squar.height * scale,
+                        squar.width * scale,
+                        squar.height * scale );
 
-                r = new Rect( 
-                    i * squar.width * scale, 
-                    j * squar.height * scale, 
-                    squar.width * scale, 
+                    if (level.Contain( i, j )) {
+                        GUI.color = level.Color( i, j );
+                        GUI.DrawTexture( r, squar );
+
+                        DrawNumbers( r, i, j );
+                    }
+
+                }
+            }
+
+            GUI.color = current.shapeColor;
+            foreach (var pair in current.matrix) {
+
+                r = new Rect(
+                    pair.Key.x * squar.width * scale,
+                    pair.Key.y * squar.height * scale,
+                    squar.width * scale,
                     squar.height * scale );
 
-                if (level.Contain( i, j ) ) {
-                    GUI.color = level.Color(i, j);
-					GUI.DrawTexture( r, squar );
-
-                    DrawNumbers(r, i, j);
-                }
+                GUI.DrawTexture( r, squar );
+#if (UNITY_EDITOR)
+                DrawNumbers( r, pair.Key.x, pair.Key.y );
+#endif
 
             }
         }
-
-		GUI.color = current.shapeColor;
-        foreach (var pair in current.matrix) {
-            
-            r = new Rect( 
-                pair.Key.x * squar.width * scale, 
-                pair.Key.y * squar.height * scale, 
-                squar.width * scale, 
-                squar.height * scale);
-
-            GUI.DrawTexture( r, squar );
-
-            DrawNumbers(r, pair.Key.x, pair.Key.y);
-
-        }
     }
-
+#if (UNITY_EDITOR)
     void DrawNumbers(Rect r, int x, int y) {
         r.x += 2;
         r.y += 2;
 
         GUI.Label(r, string.Format("{0}:{1}", x, y ), style);
     }
+#endif
 }

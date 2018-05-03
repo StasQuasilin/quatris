@@ -1,16 +1,30 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyboardInput : MonoBehaviour {
+public class KeyboardInput : IInput {
+    public override bool LevelLeft() {
+        return Input.GetKeyDown( KeyCode.A );
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public override bool LevelRight() {
+        return Input.GetKeyDown( KeyCode.D );
+    }
+
+    public override bool ShapeFall() {
+        return Input.GetKey( KeyCode.DownArrow );
+    }
+
+    public override bool ShapeLeft() {
+        return Input.GetKeyDown( KeyCode.LeftArrow );
+    }
+
+    public override bool ShapeRight() {
+        return Input.GetKeyDown( KeyCode.RightArrow );
+    }
+
+    public override bool ShapeRotate() {
+        return Input.GetKeyDown( KeyCode.UpArrow );
+    }
 }
