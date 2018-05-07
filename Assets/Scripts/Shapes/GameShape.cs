@@ -29,23 +29,35 @@ public class GameShape {
         }
     }
 
-    List<Vector2Int> removas = new List<Vector2Int>();
-    List<KeyValuePair<Vector2Int, Color>> addeds = new List<KeyValuePair<Vector2Int, Color>>();
-    public void Move(int x, int y) {
+    internal List<Vector2Int> removas = new List<Vector2Int>();
+    internal List<KeyValuePair<Vector2Int, Color>> addeds = new List<KeyValuePair<Vector2Int, Color>>();
+    public void TotalMove(int x, int y) {
 
         foreach (var pair in matrix) {
-            addeds.Add(new KeyValuePair<Vector2Int, Color>(new Vector2Int(pair.Key.x + x, pair.Key.y + y), pair.Value));
-            removas.Add(pair.Key);
+            Move( pair, x, y );
         }
 
+        UpdateMatrix();
+    }
+
+    internal void Move(KeyValuePair<Vector2Int, Color> pair, int x, int y) {
+        addeds.Add( new KeyValuePair<Vector2Int, Color>( new Vector2Int( pair.Key.x + x, pair.Key.y + y ), pair.Value ) );
+        removas.Add( pair.Key );
+    }
+
+    internal void UpdateMatrix() {
         while (removas.Count > 0) {
-            matrix.Remove(removas[0]);
-            removas.RemoveAt(0);
+            matrix.Remove( removas[ 0 ] );
+            removas.RemoveAt( 0 );
         }
 
         while (addeds.Count > 0) {
-            matrix.Add(addeds[0].Key, addeds[0].Value);
-            addeds.RemoveAt(0);
+            if (matrix.ContainsKey(addeds[0].Key)) {
+                matrix[ addeds[ 0 ].Key ] = addeds[ 0 ].Value;
+            } else {
+                matrix.Add( addeds[ 0 ].Key, addeds[ 0 ].Value );
+            }
+            addeds.RemoveAt( 0 );
         }
     }
 
