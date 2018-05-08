@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Level : MonoBehaviour {
 
-    LevelShape levelShape;
-    GameField gameField;
+    internal LevelShape levelShape;
+    internal GameField gameField;
 
     public void Add(Shape shape) {
         levelShape.Add(shape.matrix);
+        Align();
     }
 
     public void Init(Shapes.ShapeValue values) {
@@ -39,6 +40,28 @@ public class Level : MonoBehaviour {
         }
 
         return false;
+    }
+
+    public int CheckDrops() {
+
+        int result = 0;
+        return result;
+    }
+
+    void Check() {
+        
+    }
+
+
+
+    public void Right() {
+        MatrixUtil.RotateRight( levelShape );
+        Align();
+    }
+
+    public void Left() {
+        MatrixUtil.RotateLeft( levelShape );
+        Align();
     }
 
 }

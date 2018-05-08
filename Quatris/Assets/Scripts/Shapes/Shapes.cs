@@ -45,7 +45,6 @@ public class Shapes : MonoBehaviour {
             lastValues.RemoveAt(0);
         }
 
-        Debug.Log("Generate " + resultShape);
         return resultShape;
     }
 

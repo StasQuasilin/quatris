@@ -62,4 +62,16 @@ public abstract class IShape {
 
     }
 
+    public int Width {
+        get {
+            return maxX - minX;
+        }
+    }
+
+    public int Height {
+        get {
+            return maxY - minY;
+        }
+    }
+
 }

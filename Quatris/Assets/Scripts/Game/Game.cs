@@ -8,14 +8,21 @@ public class Game : MonoBehaviour {
     Level level;
     public Texture2D cube;
     public int fieldWidth = -1;
-    GameField gameField;
+    public GameField gameField;
     public GameTimer timer;
     GameInput input;
 
     Shape currentShape;
     Shapes.ShapeValue next;
 
-    bool isGame = false;
+    internal int scores;
+    internal int Level {
+        get {
+            return timer.currentLevel;
+        }
+    }
+
+    internal bool isGame = false;
 
     void Start() {
 
@@ -69,6 +76,32 @@ public class Game : MonoBehaviour {
 
         if (isGame) {
 
+            ////////////////LEVEL ROTATION////////////////
+
+            if (input.LevelRight()) {
+                level.Right();
+            } else if (input.LevelLeft()) {
+                level.Left();
+            }
+
+            ////////////////SHAPE ROTATION////////////////
+            if (input.ShapeRotate()) {
+
+                currentShape.CheckBounds();
+
+                if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
+                    currentShape.Move( 1, 0 );
+                }
+
+                MatrixUtil.RotateRight( currentShape );
+
+                if (level.Contain(currentShape.matrix)) {
+                    MatrixUtil.RotateLeft( currentShape );
+                    
+                }
+            }
+            
+            ////////////////SHAPE MOVE////////////////
             if (input.ShapeLeft()) {
 
                 currentShape.Move(-1, 0);
@@ -84,7 +117,8 @@ public class Game : MonoBehaviour {
                     currentShape.Move(-1, 0);
                 }
             }
-
+            
+            ////////////////SHAPE FALL////////////////
             timer.Fasta = input.ShapeFall();
 
             if (timer.isTime()) {
@@ -93,11 +127,24 @@ public class Game : MonoBehaviour {
                 if (level.Contain(currentShape.matrix)) {
                     currentShape.Move(0, -1);
                     level.Add(currentShape);
+
+                    AddScore( currentShape.matrix.Count );
+                    AddScore( level.CheckDrops() * 3 );
                     InitCurrent();
                 }
             }
+
+
+            if (UnderFloor) {
+                AddScore( -currentShape.matrix.Count * 5 );
+                InitCurrent();
+            }
         }
 	}
+
+    void AddScore(int count) {
+        scores += count;
+    }
 
     void OnGUI() {
         if (isGame) {
@@ -109,8 +156,22 @@ public class Game : MonoBehaviour {
     bool ValidSide {
         get {
             foreach (var pair in currentShape.matrix) {
-                if (pair.Key.x < 0 || 
-                    pair.Key.x > gameField.wSize - 1) {
+                if (pair.Key.x < 0) {
+                    return false;
+                }
+                if (pair.Key.x > gameField.wSize - 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    bool UnderFloor {
+        get {
+            foreach(var pair in currentShape.matrix) {
+                if (pair.Key.y < gameField.hSize - 1) {
                     return false;
                 }
             }
