@@ -13,7 +13,7 @@ public class Game : MonoBehaviour {
     GameInput input;
 
     Shape currentShape;
-    Shapes.ShapeValue next;
+    internal Shapes.ShapeValue next;
 
     internal int scores;
     internal int Level {
@@ -139,6 +139,12 @@ public class Game : MonoBehaviour {
                 AddScore( -currentShape.matrix.Count * 5 );
                 InitCurrent();
             }
+
+            int targetLevel = scores / 1000 + 1;
+
+            if (timer.currentLevel != targetLevel && targetLevel <= timer.maxLevel) {
+                timer.currentLevel = targetLevel;
+            }
         }
 	}
 
@@ -179,4 +185,5 @@ public class Game : MonoBehaviour {
             return true;
         }
     }
+
 }

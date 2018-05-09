@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class GameInput : MonoBehaviour {
 
+    GameButton LeftArrow, RightArrow;
+
+    void Awake() {
+        LeftArrow = new GameButton(KeyCode.LeftArrow, 3, 0.1f);
+        RightArrow = new GameButton(KeyCode.RightArrow, 3, 0.1f);
+    }
+
 	public bool ShapeLeft() {
-        return Input.GetKeyDown(KeyCode.LeftArrow);
+
+        return LeftArrow.ButtonValue();
     }
 
     public bool ShapeRight() {
-        return Input.GetKeyDown(KeyCode.RightArrow);
+
+        return RightArrow.ButtonValue();
+
     }
 
     public bool ShapeFall() {
@@ -27,5 +37,4 @@ public class GameInput : MonoBehaviour {
     public bool LevelLeft() {
         return Input.GetKeyDown( KeyCode.A );
     }
-
 }

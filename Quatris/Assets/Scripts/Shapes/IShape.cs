@@ -18,19 +18,28 @@ public abstract class IShape {
     public void Move(int x, int y) {
 
         foreach (var pair in matrix) {
-            removas.Add(pair.Key);
-            addeds.Add(new KeyValuePair<Key2D, Color>(
-                    new Key2D(pair.Key.x + x, pair.Key.y + y),
-                    pair.Value
-                ));
+            Move(pair, x, y);
         }
 
-        while(removas.Count > 0) {
+        UpdateMatrix();
+        
+    }
+
+    public void Move(KeyValuePair<Key2D, Color> pair, int x, int y) {
+        removas.Add(pair.Key);
+        addeds.Add(new KeyValuePair<Key2D, Color>(
+                new Key2D(pair.Key.x + x, pair.Key.y + y),
+                pair.Value
+            ));
+    }
+
+    public void UpdateMatrix() {
+        while (removas.Count > 0) {
             matrix.Remove(removas[0]);
             removas.RemoveAt(0);
         }
 
-        while(addeds.Count > 0) {
+        while (addeds.Count > 0) {
             matrix.Add(addeds[0].Key, addeds[0].Value);
             addeds.RemoveAt(0);
         }

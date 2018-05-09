@@ -8,6 +8,29 @@ public class LevelShape : Shape {
         
     }
 
+    public int Drop(int line) {
+        int dropResult = 0;
+
+        for (int i = minX; i < maxX + 1; i++) {
+            Key2D dKey = new Key2D(i, line);
+
+            if (matrix.ContainsKey(dKey)) {
+                matrix.Remove(dKey);
+                dropResult++;
+            }
+        }
+
+        foreach (var pair in matrix) {
+            if (pair.Key.y < line) {
+                Move(pair, 0, 1);
+            }
+        }
+
+        UpdateMatrix();
+
+        return dropResult;
+    }
+
     public void Add(Dictionary<Key2D, Color> mtrx) {
 
         foreach (var pair in mtrx) {

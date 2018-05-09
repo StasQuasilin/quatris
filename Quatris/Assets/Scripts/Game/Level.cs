@@ -44,12 +44,44 @@ public class Level : MonoBehaviour {
 
     public int CheckDrops() {
 
-        int result = 0;
+        int result = Check();
+
+        Right();
+        Align();
+
+        result += Check();
+
+        Left();
+        Align();
+
         return result;
     }
 
-    void Check() {
-        
+    int Check() {
+
+        int result = 0;
+
+        levelShape.CheckBounds();
+
+        //ROWS
+        for (int i = levelShape.minY; i < levelShape.maxY + 1;) {
+            bool dropIt = true;
+            //COLUMNS
+            for(int j = 0; j < gameField.wSize; j++) {
+                if (!levelShape.Contain(new Key2D(j, i))) {
+                    dropIt = false;
+                    break;
+                }
+            }
+
+            if (dropIt) {
+                result += levelShape.Drop(i);
+            } else {
+                i++;
+            }
+        }
+
+        return result;
     }
 
 
