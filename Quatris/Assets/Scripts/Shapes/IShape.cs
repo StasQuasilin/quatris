@@ -45,6 +45,24 @@ public abstract class IShape {
         }
     }
 
+    public void Add(Dictionary<Key2D, Color> mtrx) {
+
+        foreach (var pair in mtrx) {
+            if (Contain( pair.Key )) {
+                matrix[ pair.Key ] = pair.Value;
+            } else {
+                matrix.Add( pair.Key, pair.Value );
+            }
+        }
+
+    }
+
+    public void Set(Dictionary<Key2D, Color> mtrx) {
+        matrix.Clear();
+
+        Add( mtrx );
+    }
+
     public void CheckBounds() {
 
         minX = minY = int.MaxValue;

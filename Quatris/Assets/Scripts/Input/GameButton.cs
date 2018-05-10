@@ -5,38 +5,29 @@ using UnityEngine;
 public class GameButton {
 
     private KeyCode button;
-    private float firstPause;
-    private float secondPause;
     private bool guiInput;
     private int reqCount = 0;
+    float[] delays;
 
-	public GameButton(KeyCode button, float firstPause, float secondPause) {
+	public GameButton(KeyCode button, float [] delays) {
+
         this.button = button;
-        this.firstPause = firstPause;
-        this.secondPause = secondPause;
+        this.delays = delays;
     }
 
-    float pause;
     float lastReq;
 
     public bool ButtonValue() {
 
-        if (Input.GetKey(button)) {
-            if (reqCount == 0) {
-                reqCount++;
-                return true;
-            }else if (reqCount == 1) {
-                pause = firstPause;
-            } else {
-                pause = secondPause;
-            }
+        if (Input.GetKey(button) || guiInput) {
+            reqCount = Mathf.Clamp( reqCount, 0, delays.Length - 1 );
 
-            if (Time.time > lastReq + pause) {
+            if (Time.time > lastReq + delays[reqCount]) {
                 lastReq = Time.time;
                 reqCount++;
-
                 return true;
-            }
+            } 
+            
         } else {
             reqCount = 0;
         }

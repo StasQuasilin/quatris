@@ -12,12 +12,17 @@ public class Level : MonoBehaviour {
         Align();
     }
 
+    public void Init() {
+        levelShape = new LevelShape( new Shapes.ShapeValue(), 0, 0 );
+    }
+
     public void Init(Shapes.ShapeValue values) {
         levelShape = new LevelShape(values, 0, 0);
         Align();
     }
 
-    void Align() {
+    public void Align() {
+
         levelShape.CheckBounds();
 
         int hA = (gameField.wSize - (levelShape.minX + levelShape.maxX)) / 2;
@@ -84,7 +89,17 @@ public class Level : MonoBehaviour {
         return result;
     }
 
+    public bool GameOver {
+        get {
+            foreach(var pair in levelShape.matrix) {
+                if (pair.Key.y <= 0) {
+                    return true;
+                }
+            }
 
+            return false;
+        }
+    }
 
     public void Right() {
         MatrixUtil.RotateRight( levelShape );

@@ -5,5 +5,4 @@ git add .
 git commit -m "Update %DATE% from %COMPUTERNAME%"
 git push
 
-echo %date%
 pause

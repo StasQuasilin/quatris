@@ -31,18 +31,6 @@ public class LevelShape : Shape {
         return dropResult;
     }
 
-    public void Add(Dictionary<Key2D, Color> mtrx) {
-
-        foreach (var pair in mtrx) {
-            if (Contain(pair.Key)) {
-                matrix[pair.Key] = pair.Value;
-            } else {
-                matrix.Add(pair.Key, pair.Value);
-            }
-        }
-        
-    }
-
     public bool IsEmpty {
         get {
             return matrix == null || matrix.Count == 0;

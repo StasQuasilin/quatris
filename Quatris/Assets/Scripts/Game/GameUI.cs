@@ -13,12 +13,16 @@ public class GameUI : MonoBehaviour {
     GUIStyle labelStyle;
 
     Game game;
+    public GameObject gameStartLabel;
+    public GameObject pauseLabel;
+    public GameObject gameOverLabel;
 
     void Awake() {
         game = FindObjectOfType<Game>();
     }
 
     void Start() {
+
         labelStyle = new GUIStyle();
         labelStyle.font = font;
         labelStyle.fontSize = fontSize;
@@ -26,11 +30,43 @@ public class GameUI : MonoBehaviour {
         labelStyle.alignment = TextAnchor.MiddleCenter;
     }
 
+    void Update() {
+
+        if (!game.isGameOver) {
+
+            if (gameStartLabel.activeSelf != !game.isGame) {
+                gameStartLabel.SetActive( !game.isGame );
+            }
+
+            if (pauseLabel.activeSelf != !game.isPause) {
+                pauseLabel.SetActive( !game.isPause );
+            }
+
+            if (gameOverLabel.activeSelf) {
+                gameOverLabel.SetActive( false );
+            }
+        } else {
+            if (gameStartLabel.activeSelf) {
+                gameStartLabel.SetActive( false );
+            }
+
+            if (pauseLabel.activeSelf) {
+                pauseLabel.SetActive( false );
+            }
+
+            if (gameOverLabel.activeSelf != game.isGameOver) {
+                gameOverLabel.SetActive( game.isGameOver );
+            }
+        }
+
+        
+    }
+
     Rect r;
     Rect nR;
 	void OnGUI() {
-
-        r = new Rect( Screen.width - 100, 2, 100, 20 );
+        
+        r = new Rect( Screen.width - 100, 15, 100, 20 );
 
         /////NEXT/////
         GUI.Label(r, "Next", labelStyle);
@@ -54,7 +90,7 @@ public class GameUI : MonoBehaviour {
             }
         }
 
-        r.y += 4 * smallCube.height + betweenLabelSpace / 2;
+        r.y += 4 * smallCube.height + betweenLabelSpace * 0.05f;
         
         /////SCORES/////
         GUI.Label( r, "Scores", labelStyle );
@@ -71,5 +107,11 @@ public class GameUI : MonoBehaviour {
         r.y += betweenLabelSpace / 2;
 
         GUI.Label( r, game.Level.ToString(), labelStyle );
+
+        if (!game.isGame) {
+
+        } else if (game.isPause) {
+
+        }
     }
 }

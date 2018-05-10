@@ -6,9 +6,7 @@ public class Game : MonoBehaviour {
 
     Shapes shapeFactory;
     Level level;
-    public Texture2D cube;
-    public int fieldWidth = -1;
-    public GameField gameField;
+    GameField gameField;
     public GameTimer timer;
     GameInput input;
 
@@ -23,16 +21,16 @@ public class Game : MonoBehaviour {
     }
 
     internal bool isGame = false;
+    internal bool isPause = false;
+    internal bool isGameOver = false;
 
     void Start() {
 
+        io = new DataIO( Application.dataPath + "\\data.t" );
+
         shapeFactory = FindObjectOfType<Shapes>();
 
-        if (fieldWidth == -1) {
-            gameField = new GameField(cube);
-        } else {
-            gameField = new GameField(fieldWidth, cube);
-        }
+        gameField = FindObjectOfType<GameField>();
 
         level = FindObjectOfType<Level>();
         if (level == null) {
@@ -47,17 +45,16 @@ public class Game : MonoBehaviour {
             input = gameObject.AddComponent<GameInput>();
         }
 
-        
+        Load();
     }
 
     void InitLevel() {
-        Debug.Log("INIT LEVEL");
 
         level.Init(shapeFactory.GetShape());
         InitNext();
         InitCurrent();
 
-        isGame = true;
+        isPause = true;
     }
 
     void InitNext() {
@@ -65,95 +62,126 @@ public class Game : MonoBehaviour {
     }
 
     void InitCurrent() {
-        currentShape = new Shape(next, (gameField.wSize - next.xSize) / 2, 0);
+        currentShape = new Shape(next, (gameField.wSize - next.xSize) / 2, -next.ySize / 2);
         InitNext();
     }
 	
 	void Update () {
-		if (level.IsEmpty) {
+
+        if (level.IsEmpty) {
             InitLevel();
         }
 
-        if (isGame) {
+        isGameOver = level.GameOver;
 
-            ////////////////LEVEL ROTATION////////////////
+        if (isGame && !isGameOver) {
 
-            if (input.LevelRight()) {
-                level.Right();
-            } else if (input.LevelLeft()) {
-                level.Left();
+            if (input.Pause()) {
+                isPause = !isPause;
+
+                if (!isPause) {
+                    Save();
+                }
             }
 
-            ////////////////SHAPE ROTATION////////////////
-            if (input.ShapeRotate()) {
+            if (isPause) {
 
-                currentShape.CheckBounds();
+                ////////////////LEVEL ROTATION////////////////
 
-                if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
+                if (input.LevelRight()) {
+                    level.Right();
+                } else if (input.LevelLeft()) {
+                    level.Left();
+                }
+
+                ////////////////SHAPE ROTATION////////////////
+                if (input.ShapeRotate()) {
+
+                    currentShape.CheckBounds();
+
+                    if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
+                        currentShape.Move( 1, 0 );
+                    }
+
+                    MatrixUtil.RotateRight( currentShape );
+
+                    if (level.Contain( currentShape.matrix )) {
+                        MatrixUtil.RotateLeft( currentShape );
+
+                    }
+                }
+
+                ////////////////SHAPE MOVE////////////////
+                if (input.ShapeLeft()) {
+
+                    currentShape.Move( -1, 0 );
+
+                    if (level.Contain( currentShape.matrix ) || !ValidSide) {
+                        currentShape.Move( 1, 0 );
+                    }
+                } else if (input.ShapeRight()) {
+
                     currentShape.Move( 1, 0 );
+
+                    if (level.Contain( currentShape.matrix ) || !ValidSide) {
+                        currentShape.Move( -1, 0 );
+                    }
                 }
 
-                MatrixUtil.RotateRight( currentShape );
+                ////////////////SHAPE FALL////////////////
+                timer.Fasta = input.ShapeFall();
 
-                if (level.Contain(currentShape.matrix)) {
-                    MatrixUtil.RotateLeft( currentShape );
-                    
+                if (timer.isTime()) {
+                    currentShape.Move( 0, 1 );
+
+                    if (level.Contain( currentShape.matrix )) {
+                        currentShape.Move( 0, -1 );
+                        level.Add( currentShape );
+
+                        AddScore( currentShape.matrix.Count );
+                        AddScore( level.CheckDrops() * 3 );
+                        InitCurrent();
+                    }
                 }
-            }
-            
-            ////////////////SHAPE MOVE////////////////
-            if (input.ShapeLeft()) {
 
-                currentShape.Move(-1, 0);
 
-                if (level.Contain(currentShape.matrix) || !ValidSide) {
-                    currentShape.Move(1, 0);
-                }
-            } else if (input.ShapeRight()) {
+                if (UnderFloor) {
 
-                currentShape.Move(1, 0);
-
-                if (level.Contain(currentShape.matrix) || !ValidSide) {
-                    currentShape.Move(-1, 0);
-                }
-            }
-            
-            ////////////////SHAPE FALL////////////////
-            timer.Fasta = input.ShapeFall();
-
-            if (timer.isTime()) {
-                currentShape.Move(0, 1);
-
-                if (level.Contain(currentShape.matrix)) {
-                    currentShape.Move(0, -1);
-                    level.Add(currentShape);
-
-                    AddScore( currentShape.matrix.Count );
-                    AddScore( level.CheckDrops() * 3 );
+                    AddScore( -currentShape.matrix.Count * 5 );
                     InitCurrent();
+
+                }
+
+                int targetLevel = scores / 1000 + 1;
+
+                if (timer.currentLevel != targetLevel && targetLevel <= timer.maxLevel) {
+                    timer.currentLevel = targetLevel;
                 }
             }
-
-
-            if (UnderFloor) {
-                AddScore( -currentShape.matrix.Count * 5 );
-                InitCurrent();
-            }
-
-            int targetLevel = scores / 1000 + 1;
-
-            if (timer.currentLevel != targetLevel && targetLevel <= timer.maxLevel) {
-                timer.currentLevel = targetLevel;
+        } else {
+            if (Input.anyKey || Input.touchCount > 0) {
+                GameStart();
             }
         }
 	}
+
+    void GameStart() {
+        if (!isGameOver) {
+            isGame = true;
+        } else {
+            scores = 0;
+            timer.currentLevel = 1;
+            InitLevel();
+        }
+    }
 
     void AddScore(int count) {
         scores += count;
     }
 
     void OnGUI() {
-        if (isGame) {
+        gameField.DrawBorder();
+        if (isPause) {
             gameField.Draw(currentShape.matrix);
             gameField.Draw(level.levelShape.matrix);
         }
@@ -162,10 +190,7 @@ public class Game : MonoBehaviour {
     bool ValidSide {
         get {
             foreach (var pair in currentShape.matrix) {
-                if (pair.Key.x < 0) {
-                    return false;
-                }
-                if (pair.Key.x > gameField.wSize - 1) {
+                if (pair.Key.x < 0 || pair.Key.x > gameField.wSize - 1) {
                     return false;
                 }
             }
@@ -186,4 +211,28 @@ public class Game : MonoBehaviour {
         }
     }
 
+    DataIO io;
+    void Save() {
+
+        io.Save( scores, timer.currentLevel, level.levelShape.matrix, currentShape.matrix );
+    }
+
+    void Load() {
+        Data data = io.Load();
+
+        if (data != null) {
+            scores = data._scores;
+            timer.currentLevel = data._level;
+
+            InitLevel();
+            level.levelShape.Set( data.LevelData );
+            currentShape.Set( data.ShapeData );
+
+            level.Align();
+        }
+    }
+
+    void OnApplicationQuit() {
+        Save();
+    }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿[System.Serializable]
 public class Key2D {
 
     private int _x, _y;
