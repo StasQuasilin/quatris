@@ -13,12 +13,15 @@ public class GameUI : MonoBehaviour {
     GUIStyle labelStyle;
 
     Game game;
-    public GameObject gameStartLabel;
-    public GameObject pauseLabel;
-    public GameObject gameOverLabel;
+    GameField field;
+
+    public CustomLabel gameStartLabel;
+    public CustomLabel pauseLabel;
+    public CustomLabel gameOverLabel;
 
     void Awake() {
         game = FindObjectOfType<Game>();
+        field = FindObjectOfType<GameField>();
     }
 
     void Start() {
@@ -34,28 +37,28 @@ public class GameUI : MonoBehaviour {
 
         if (!game.isGameOver) {
 
-            if (gameStartLabel.activeSelf != !game.isGame) {
-                gameStartLabel.SetActive( !game.isGame );
+            if (gameStartLabel.draw != !game.isGame) {
+                gameStartLabel.draw = ( !game.isGame );
             }
 
-            if (pauseLabel.activeSelf != !game.isPause) {
-                pauseLabel.SetActive( !game.isPause );
+            if (pauseLabel.draw != !game.isPause) {
+                pauseLabel.draw = ( !game.isPause );
             }
 
-            if (gameOverLabel.activeSelf) {
-                gameOverLabel.SetActive( false );
+            if (gameOverLabel.draw) {
+                gameOverLabel.draw = ( false );
             }
         } else {
-            if (gameStartLabel.activeSelf) {
-                gameStartLabel.SetActive( false );
+            if (gameStartLabel.draw) {
+                gameStartLabel.draw = ( false );
             }
 
-            if (pauseLabel.activeSelf) {
-                pauseLabel.SetActive( false );
+            if (pauseLabel.draw) {
+                pauseLabel.draw = ( false );
             }
 
-            if (gameOverLabel.activeSelf != game.isGameOver) {
-                gameOverLabel.SetActive( game.isGameOver );
+            if (gameOverLabel.draw != game.isGameOver) {
+                gameOverLabel.draw = ( game.isGameOver );
             }
         }
 
@@ -66,7 +69,7 @@ public class GameUI : MonoBehaviour {
     Rect nR;
 	void OnGUI() {
         
-        r = new Rect( Screen.width - 100, 15, 100, 20 );
+        r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 100, 20 );
 
         /////NEXT/////
         GUI.Label(r, "Next", labelStyle);

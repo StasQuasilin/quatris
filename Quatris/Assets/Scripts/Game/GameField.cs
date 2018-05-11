@@ -12,19 +12,16 @@ public class GameField : MonoBehaviour {
     
     float scale;
     Rect rect;
-    bool drawBorder;
+    public Rect groupRect;
+    Rect borderRect;
 
     Texture2D border;
 
     void Awake() {
-        drawBorder = Screen.width >= Screen.height;
 
         CalcScale();
-        
-        if (drawBorder) {
-            borderRect = new Rect( 0, 0, wSize * cubeTexture.width * scale, hSize * cubeTexture.height * scale );
-            CreateBorder();
-        }
+        CreateBorder();
+
     }
 
     public void CreateBorder() {
@@ -46,26 +43,28 @@ public class GameField : MonoBehaviour {
         }
 
         border.Apply();
+
+        borderRect = new Rect( groupRect );
+        borderRect.width += borderSize;
     }
 
     void CalcScale() {
 
-        scale = 1f * Screen.width / (wSize * cubeTexture.height);
-
-        hSize = (int)(Screen.height / (cubeTexture.height * scale));
+        scale = 1f * (Screen.height - borderSize * 2)  / (hSize * cubeTexture.height);
 
         rect = new Rect(0, 0, cubeTexture.width * scale, cubeTexture.height * scale);
+        groupRect = new Rect( ( Screen.width - wSize * cubeTexture.width * scale ) / 2, borderSize, wSize * cubeTexture.width * scale, Screen.height - borderSize );
+
     }
 
-    Rect borderRect;
     public void DrawBorder() {
-        if (drawBorder) {
-            GUI.DrawTexture( new Rect( 0, 0, cubeTexture.width * wSize, cubeTexture.height * hSize ), border );
-        }
+        GUI.DrawTexture( borderRect, border );
     }
     
 	public void Draw(Dictionary<Key2D, Color> matrix) {
 
+        GUI.BeginGroup( groupRect );
+        
         foreach (var pair in matrix) {
 
             if (pair.Key.x >= 0 && pair.Key.x <= wSize - 1) {
@@ -79,11 +78,13 @@ public class GameField : MonoBehaviour {
             }
         }
 
+        GUI.EndGroup();
+
     }
 
     public int FieldCenter {
         get {
-            return (int)(hSize * 0.7f);
+            return (int)(hSize * 0.8f);
         }
     }
 

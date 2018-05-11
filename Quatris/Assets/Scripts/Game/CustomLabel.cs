@@ -3,26 +3,65 @@
 [ExecuteInEditMode]
 public class CustomLabel : MonoBehaviour {
 
-    public Font font;
-    public int fontSize = 18;
-    public Color textColor = Color.white;
-    public string text = "Text";
-    GUIStyle style;
-    public Rect rect;
-    public TextAnchor anchor = TextAnchor.MiddleCenter;
-
-    void Start() {
-        style = new GUIStyle();
-    }
+    public bool draw;
+    public Content[] content;
 
     void OnGUI() {
-        style.font = font;
-        style.fontSize = fontSize;
-        style.normal.textColor = textColor;
-        style.alignment = anchor;
 
-        GUI.Label( rect, text, style );
+        if (draw) {
+            if (content != null) {
+                foreach (Content c in content) {
+                    c.Draw();
+                }
+            }
+        }
     }
 
+    [System.Serializable]
+    public class Content {
+        public string text = "Text";
+        public Font font;
+        public int fontSize = 18;
+        public Color textColor = Color.white;
+        public TextAnchor aligment = TextAnchor.UpperLeft;
+        public Vector2 offset;
 
+        GUIStyle style;
+        Rect r;
+
+        public Content() {
+            style = new GUIStyle();
+            r = new Rect( 0, 0, Screen.width, Screen.height );
+        }
+
+        void Update() {
+
+            if (style.font != font) {
+                style.font = font;
+            }
+
+            if (style.fontSize != fontSize) {
+                style.fontSize = fontSize;
+            }
+
+            if (style.normal.textColor != textColor) {
+                style.normal.textColor = textColor;
+            }
+
+            if (style.alignment != aligment) {
+                style.alignment = aligment;
+            }
+
+            if (r.x != offset.x || r.y != offset.y) {
+                r = new Rect( offset.x, offset.y, Screen.width, Screen.height );
+            }
+        }
+
+        public void Draw() {
+            Update();
+            GUI.Label( r, text, style );
+        }
+    }
 }
+
+

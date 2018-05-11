@@ -29,7 +29,7 @@ public class GameInput : MonoBehaviour {
         buttonStyle.normal.background = ButtonNormalTexture;
         buttonStyle.focused.background = ButtonPressedTexture;
 
-        int w = (int)(Screen.width * 0.3f);
+        int w = (int)(1f * Screen.height / 3);
         Rect lR = new Rect( 0, Screen.height - w, w, w );
         Rect rR = new Rect( Screen.width - w, Screen.height - w, w, w );
 
@@ -92,11 +92,11 @@ public class GameInput : MonoBehaviour {
 
     Rect r1, r2, r3, r4, r5, r6;
     void OnGUI() {
-        shapeFall = GUI.RepeatButton( r1, "Shape\nFall", buttonStyle );
-        UpArrow.GUIInput = GUI.RepeatButton( r2, "Shape\nRotate", buttonStyle );
-        LeftArrow.GUIInput = GUI.RepeatButton( r3, "Left", buttonStyle );
-        RightArrow.GUIInput = GUI.RepeatButton( r4, "Right", buttonStyle );
-        AButton.GUIInput = GUI.RepeatButton( r5, "Level\nLeft", buttonStyle );
-        DButton.GUIInput = GUI.RepeatButton( r6, "Level\nRight", buttonStyle );
+        shapeFall = GUI.RepeatButton( r1, "Down", buttonStyle );
+        UpArrow.GUIInput = GUI.RepeatButton( r2, "Up", buttonStyle );
+        LeftArrow.GUIInput = GUI.RepeatButton( r3, "Left A", buttonStyle );
+        RightArrow.GUIInput = GUI.RepeatButton( r4, "Right A", buttonStyle );
+        AButton.GUIInput = GUI.RepeatButton( r5, "Left B", buttonStyle );
+        DButton.GUIInput = GUI.RepeatButton( r6, "Right B", buttonStyle );
     }
 }
