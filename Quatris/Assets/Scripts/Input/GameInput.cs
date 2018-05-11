@@ -23,7 +23,7 @@ public class GameInput : MonoBehaviour {
 
         buttonStyle = new GUIStyle();
         buttonStyle.font = buttonFont;
-        buttonStyle.fontSize = 16;
+        buttonStyle.fontSize = 24;
         buttonStyle.alignment = TextAnchor.MiddleCenter;
         
         buttonStyle.normal.background = ButtonNormalTexture;
