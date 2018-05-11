@@ -110,6 +110,54 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &1250283829
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662266289070542, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+  m_IsPrefabParent: 0
+--- !u!114 &1250283830 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114762529868164802, guid: f02b00868d84a55469ad9a8ecd12fc63,
+    type: 2}
+  m_PrefabInternal: {fileID: 1250283829}
+  m_Script: {fileID: 11500000, guid: fbc7f91792ac2f740a7c95248ad0dbf0, type: 3}
 --- !u!1 &1563416085
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4600f76bc2afa4c90fc629730d03f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shapes: {fileID: 114762529868164802, guid: f02b00868d84a55469ad9a8ecd12fc63, type: 2}
+  shapes: {fileID: 1250283830}
 --- !u!4 &1563416087
 Transform:
   m_ObjectHideFlags: 0
