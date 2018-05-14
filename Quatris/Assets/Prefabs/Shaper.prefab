@@ -51,4 +51,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc7f91792ac2f740a7c95248ad0dbf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  values: []
+  values:
+  - xSize: 3
+    ySize: 2
+    values: 010001010001
+  - xSize: 2
+    ySize: 3
+    values: 010101000001
+  - xSize: 3
+    ySize: 2
+    values: 000101010001
+  - xSize: 3
+    ySize: 2
+    values: 000101010100
+  - xSize: 2
+    ySize: 2
+    values: 01010101
+  - xSize: 2
+    ySize: 3
+    values: 000001010101
+  - xSize: 2
+    ySize: 2
+    values: 01010001
+  - xSize: 3
+    ySize: 3
+    values: 000100010101000100
+  - xSize: 3
+    ySize: 3
+    values: 010101000100010101
+  - xSize: 1
+    ySize: 3
+    values: 010101
+  - xSize: 1
+    ySize: 4
+    values: 01010101

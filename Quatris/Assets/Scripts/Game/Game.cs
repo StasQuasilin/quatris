@@ -26,8 +26,6 @@ public class Game : MonoBehaviour {
 
     void Start() {
 
-        io = new DataIO( Application.dataPath + "\\data.t" );
-
         shapeFactory = FindObjectOfType<Shapes>();
 
         gameField = FindObjectOfType<GameField>();
@@ -181,10 +179,8 @@ public class Game : MonoBehaviour {
 
     void OnGUI() {
         gameField.DrawBorder();
-        if (isPause) {
-            gameField.Draw(currentShape.matrix);
-            gameField.Draw(level.levelShape.matrix);
-        }
+        gameField.Draw( currentShape.matrix );
+        gameField.Draw( level.levelShape.matrix );
     }
 
     bool ValidSide {
@@ -214,11 +210,12 @@ public class Game : MonoBehaviour {
     DataIO io;
     void Save() {
 
-        io.Save( scores, timer.currentLevel, level.levelShape.matrix, currentShape.matrix );
+        DataIO.io.Save( new Data( scores, timer.currentLevel, level.levelShape.matrix, currentShape.matrix ) );
     }
 
     void Load() {
-        Data data = io.Load();
+
+        Data data = DataIO.io.Load<Data>();
 
         if (data != null) {
             scores = data._scores;

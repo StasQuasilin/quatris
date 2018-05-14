@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 public class Shapes : MonoBehaviour {
-    
+
     [System.Serializable]
-	public class ShapeValue {
+    public class ShapeValue {
         static int totalNumber = 0;
         private int privateNumber;
 
@@ -31,10 +31,11 @@ public class Shapes : MonoBehaviour {
         }
     }
 
-    public List<ShapeValue> values;
-    List<ShapeValue> lastValues = new List<ShapeValue>();
+    public List<ShapeValue> values = new List<ShapeValue>();
 
+    List<ShapeValue> lastValues = new List<ShapeValue>();
     ShapeValue resultShape;
+
 	public ShapeValue GetShape() {
 
         while (lastValues.Contains(resultShape = RandomShape()));

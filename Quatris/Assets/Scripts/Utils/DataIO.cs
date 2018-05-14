@@ -5,52 +5,61 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-[System.Serializable]
-public class DataIO {
+public class DataIO : MonoBehaviour {
+
+    public static DataIO io = null;
+    public string path;
 
     FileStream stream;
-    StreamWriter writer;
     BinaryFormatter formatter;
-    string path;
 
-    public DataIO(string path) {
-        this.path = path;
+    void Awake() {
+
+        if (io == null) {
+            io = this;
+        } else {
+            Destroy( this );
+        }
+
+        path = Application.persistentDataPath;
         formatter = new BinaryFormatter();
     }
-    Data data;
-    public void Save(int scores, int level, Dictionary<Key2D,Color> levelShape, Dictionary<Key2D, Color> shape) {
-        data = new Data( scores, level, levelShape, shape );
-        Save( data );
-    }
 
-    public void Save(Data data) {
-        stream = new FileStream( path, FileMode.Create );
+    public void Save(ISerializable data, FileMode mode = FileMode.Create) {
+        stream = new FileStream( FileName(data.ToString()), mode );
         formatter.Serialize( stream, data );
         stream.Close();
     }
 
-    public Data Load() {
-        data = null;
+    public T Load<T>() {
+
+        T data = Activator.CreateInstance<T>();
 
         try {
-            stream = new FileStream( path, FileMode.Open );
-            data = ( Data ) formatter.Deserialize( stream );
+            stream = new FileStream( FileName(data.ToString()), FileMode.Open );
+            data = ( T ) formatter.Deserialize( stream );
             stream.Close();
         } catch (Exception) {
-            Debug.Log( "No save data" );
+            Debug.Log( "No save data for " + data.ToString() );
         }
 
         return data;
     }
+
+    string FileName(string dataName) {
+        return path + "\\" + dataName + ".t";
+    }
 }
 
-[Serializable()]
+[Serializable]
 public class Data : ISerializable {
 
     public int _scores;
     public int _level;
     public List<KeyColorData> _levelData;
     public List<KeyColorData> _shapeData;
+
+    public Data() { }
 
     public Data(int scores, int level, Dictionary<Key2D,Color> levelData, Dictionary<Key2D, Color> shapeData) {
         _scores = scores;

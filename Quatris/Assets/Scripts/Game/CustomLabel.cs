@@ -23,6 +23,7 @@ public class CustomLabel : MonoBehaviour {
         public Font font;
         public int fontSize = 18;
         public Color textColor = Color.white;
+        public FontStyle fontStyle;
         public TextAnchor aligment = TextAnchor.UpperLeft;
         public Vector2 offset;
 
@@ -50,6 +51,10 @@ public class CustomLabel : MonoBehaviour {
 
             if (style.alignment != aligment) {
                 style.alignment = aligment;
+            }
+
+            if (style.fontStyle != fontStyle) {
+                style.fontStyle = fontStyle;
             }
 
             if (r.x != offset.x || r.y != offset.y) {
