@@ -23,6 +23,9 @@ public class Game : MonoBehaviour {
     internal bool isGame = false;
     internal bool isPause = false;
     internal bool isGameOver = false;
+    internal bool canInit = false;
+
+    public AudioSource seat;
 
     void Start() {
 
@@ -71,6 +74,8 @@ public class Game : MonoBehaviour {
         }
 
         isGameOver = level.GameOver;
+
+        canInit = isGameOver && !input.AnyKey;
 
         if (isGame && !isGameOver) {
 
@@ -136,6 +141,7 @@ public class Game : MonoBehaviour {
                         currentShape.Move( 0, -1 );
                         level.Add( currentShape );
 
+                        seat.Play();
                         AddScore( currentShape.matrix.Count );
                         AddScore( level.CheckDrops() * 3 );
                         InitCurrent();
@@ -166,7 +172,7 @@ public class Game : MonoBehaviour {
     void GameStart() {
         if (!isGameOver) {
             isGame = true;
-        } else {
+        } else if (canInit) {
             scores = 0;
             timer.currentLevel = 1;
             InitLevel();
@@ -177,10 +183,16 @@ public class Game : MonoBehaviour {
         scores += count;
     }
 
+    float alpha;
+
     void OnGUI() {
+
         gameField.DrawBorder();
-        gameField.Draw( currentShape.matrix );
-        gameField.Draw( level.levelShape.matrix );
+
+        alpha = ( !isGameOver ? 1 : 0.2f );
+
+        gameField.Draw( currentShape.matrix, alpha );
+        gameField.Draw( level.levelShape.matrix, alpha );
     }
 
     bool ValidSide {

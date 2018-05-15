@@ -8,6 +8,7 @@ public class GameInput : MonoBehaviour {
     public Texture2D ButtonNormalTexture;
     public Texture2D ButtonPressedTexture;
     public Font buttonFont;
+    public Color buttontTextColor = Color.white;
 
     public float[] delays;
     bool shapeFall;
@@ -15,6 +16,7 @@ public class GameInput : MonoBehaviour {
     GUIStyle buttonStyle;
     
     void Awake() {
+
         LeftArrow = new GameButton  ( KeyCode   .LeftArrow,     delays );
         RightArrow = new GameButton ( KeyCode   .RightArrow,    delays );
         UpArrow = new GameButton    ( KeyCode   .UpArrow,       delays );
@@ -25,9 +27,10 @@ public class GameInput : MonoBehaviour {
         buttonStyle.font = buttonFont;
         buttonStyle.fontSize = 24;
         buttonStyle.alignment = TextAnchor.MiddleCenter;
+        buttonStyle.normal.textColor = buttontTextColor;
         
         buttonStyle.normal.background = ButtonNormalTexture;
-        buttonStyle.focused.background = ButtonPressedTexture;
+        buttonStyle.active.background = ButtonPressedTexture;
 
         int w = (int)(1f * Screen.height / 3);
         Rect lR = new Rect( 0, Screen.height - w, w, w );
@@ -90,13 +93,19 @@ public class GameInput : MonoBehaviour {
 
     }
 
+    public bool AnyKey {
+        get {
+            return !Input.anyKeyDown && Input.touchCount == 0;
+        }
+    }
+
     Rect r1, r2, r3, r4, r5, r6;
     void OnGUI() {
-        shapeFall = GUI.RepeatButton( r1, "Down", buttonStyle );
-        UpArrow.GUIInput = GUI.RepeatButton( r2, "Up", buttonStyle );
-        LeftArrow.GUIInput = GUI.RepeatButton( r3, "Left A", buttonStyle );
-        RightArrow.GUIInput = GUI.RepeatButton( r4, "Right A", buttonStyle );
-        AButton.GUIInput = GUI.RepeatButton( r5, "Left B", buttonStyle );
-        DButton.GUIInput = GUI.RepeatButton( r6, "Right B", buttonStyle );
+        shapeFall =             GUI.RepeatButton( r3, "Down",       buttonStyle );
+        UpArrow.GUIInput =      GUI.RepeatButton( r4, "Up",         buttonStyle );
+        LeftArrow.GUIInput =    GUI.RepeatButton( r5, "Left A",     buttonStyle );
+        RightArrow.GUIInput =   GUI.RepeatButton( r6, "Right A",    buttonStyle );
+        AButton.GUIInput =      GUI.RepeatButton( r1, "Left B",     buttonStyle );
+        DButton.GUIInput =      GUI.RepeatButton( r2, "Right B",    buttonStyle );
     }
 }

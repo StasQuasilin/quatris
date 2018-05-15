@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 9
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 8
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -88,9 +88,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_ShadowMaskMode: 2
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -110,8 +109,6 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
-    debug:
-      m_Flags: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &118304661
 GameObject:
@@ -157,18 +154,18 @@ MonoBehaviour:
   content:
   - text: Game
     font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
-    fontSize: 42
+    fontSize: 56
     textColor: {r: 1, g: 1, b: 1, a: 1}
     fontStyle: 0
     aligment: 4
-    offset: {x: 0, y: -15}
+    offset: {x: 0, y: -20}
   - text: Over
     font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
-    fontSize: 42
+    fontSize: 56
     textColor: {r: 1, g: 1, b: 1, a: 1}
     fontStyle: 0
     aligment: 4
-    offset: {x: 0, y: 15}
+    offset: {x: 0, y: 20}
 --- !u!1 &514372479
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +229,7 @@ MonoBehaviour:
   cubeTexture: {fileID: 2800000, guid: 3615a4563c9fe5847a62cfe404402a0e, type: 3}
   wSize: 14
   hSize: 24
-  borderSize: 2
+  borderSize: 1
   borderColor: {r: 1, g: 1, b: 1, a: 1}
   backgroundColor: {r: 0.79215693, g: 0.5764706, b: 0.5764706, a: 0}
   groupRect:
@@ -317,10 +314,11 @@ MonoBehaviour:
   ButtonNormalTexture: {fileID: 2800000, guid: 1f2816a023f2e274594565f20082afa1, type: 3}
   ButtonPressedTexture: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
   buttonFont: {fileID: 12800000, guid: 815dc7e07667eb948b80d8026204c23f, type: 3}
+  buttontTextColor: {r: 1, g: 1, b: 1, a: 1}
   delays:
   - 0
-  - 0.5
-  - 0.08
+  - 0.6
+  - 0.1
 --- !u!4 &814310975
 Transform:
   m_ObjectHideFlags: 0
@@ -446,11 +444,11 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!4 &1650905301
 Transform:
   m_ObjectHideFlags: 0
@@ -475,6 +473,7 @@ GameObject:
   - component: {fileID: 2040488246}
   - component: {fileID: 2040488248}
   - component: {fileID: 2040488250}
+  - component: {fileID: 2040488249}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -534,6 +533,87 @@ MonoBehaviour:
     currentLevel: 1
     maxLevel: 10
     speedScale: 0.8
+  seat: {fileID: 2040488249}
+--- !u!82 &2040488249
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2040488245}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: b7d0be77f79a3ca47be5d5e4990d021a, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 0.4
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &2040488250
 MonoBehaviour:
   m_ObjectHideFlags: 0
