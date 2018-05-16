@@ -28,7 +28,8 @@ public class GameInput : MonoBehaviour {
         buttonStyle.fontSize = 24;
         buttonStyle.alignment = TextAnchor.MiddleCenter;
         buttonStyle.normal.textColor = buttontTextColor;
-        
+        buttonStyle.active.textColor = buttontTextColor;
+
         buttonStyle.normal.background = ButtonNormalTexture;
         buttonStyle.active.background = ButtonPressedTexture;
 
