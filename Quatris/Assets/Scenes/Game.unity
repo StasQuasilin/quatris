@@ -376,7 +376,7 @@ MonoBehaviour:
   content:
   - text: Pause
     font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
-    fontSize: 42
+    fontSize: 56
     textColor: {r: 1, g: 1, b: 1, a: 1}
     fontStyle: 0
     aligment: 4
@@ -493,13 +493,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-  - {r: 0.29820564, g: 0.5469993, b: 0.81278515, a: 1}
-  - {r: 0.54052097, g: 0.6382603, b: 0.15045156, a: 1}
-  - {r: 0.82688665, g: 0.20793572, b: 0.7296726, a: 1}
+  - {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 0, g: 0.77205884, b: 0, a: 1}
   - {r: 0.8771845, g: 0.24644259, b: 0.06201113, a: 1}
   - {r: 0.30601493, g: 0.7578441, b: 0.8456652, a: 1}
-  - {r: 0.8864862, g: 0.47467262, b: 0.7459007, a: 1}
-  - {r: 0.8732892, g: 0.9422023, b: 0.3551953, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 0, a: 1}
   - {r: 0.6396745, g: 0.5031385, b: 0.425458, a: 1}
   - {r: 0.34195176, g: 0.985891, b: 0.555013, a: 1}
   - {r: 0.9626484, g: 0.47584707, b: 0.29968885, a: 1}
@@ -531,8 +531,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer:
     currentLevel: 1
-    maxLevel: 10
+    maxLevel: 12
     speedScale: 0.8
+  scoresList: []
   seat: {fileID: 2040488249}
 --- !u!82 &2040488249
 AudioSource:

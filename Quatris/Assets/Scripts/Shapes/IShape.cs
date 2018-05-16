@@ -13,6 +13,16 @@ public abstract class IShape {
         return matrix.ContainsKey(key);
     }
 
+    public bool Contain(Dictionary<Key2D, Color> mtrx) {
+        foreach (var pair in mtrx) {
+            if (Contain( pair.Key )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     List<Key2D> removas = new List<Key2D>();
     List<KeyValuePair<Key2D, Color>> addeds = new List<KeyValuePair<Key2D, Color>>();
     public void Move(int x, int y) {
@@ -54,7 +64,10 @@ public abstract class IShape {
                 matrix.Add( pair.Key, pair.Value );
             }
         }
+    }
 
+    public void Add(Key2D key, Color value) {
+        matrix.Add( key, value );
     }
 
     public void Set(Dictionary<Key2D, Color> mtrx) {

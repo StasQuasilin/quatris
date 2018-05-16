@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Game : MonoBehaviour {
@@ -12,18 +11,32 @@ public class Game : MonoBehaviour {
 
     Shape currentShape;
     internal Shapes.ShapeValue next;
+    public List<string> scoresList;
+
+    Scores scoresContainer;
 
     internal int scores;
     internal int Level {
         get {
             return timer.currentLevel;
         }
+
+        set {
+            timer.currentLevel = value;
+        }
     }
 
-    internal bool isGame = false;
-    internal bool isPause = false;
-    internal bool isGameOver = false;
+    public enum GameState {
+        novo,
+        start,
+        pause,
+        game,
+        over
+    }
+
+    internal GameState gameState = GameState.start;
     internal bool canInit = false;
+    internal bool notAdded = true;
 
     public AudioSource seat;
 
@@ -39,8 +52,6 @@ public class Game : MonoBehaviour {
         }
         level.gameField = gameField;
 
-
-
         input = FindObjectOfType<GameInput>();
         if(input == null) {
             input = gameObject.AddComponent<GameInput>();
@@ -50,12 +61,9 @@ public class Game : MonoBehaviour {
     }
 
     void InitLevel() {
-
         level.Init(shapeFactory.GetShape());
         InitNext();
         InitCurrent();
-
-        isPause = true;
     }
 
     void InitNext() {
@@ -73,110 +81,136 @@ public class Game : MonoBehaviour {
             InitLevel();
         }
 
-        isGameOver = level.GameOver;
+        if( level.GameOver) {
+            gameState = GameState.over;
+            canInit = !input.AnyKey;
 
-        canInit = isGameOver && !input.AnyKey;
+            if (notAdded) {
+                notAdded = false;
+                scoresContainer.Add( scores );
+                Save();
+                    
+            }
+        }
 
-        if (isGame && !isGameOver) {
+        if (input.Pause()) {
 
-            if (input.Pause()) {
-                isPause = !isPause;
+            if (gameState == GameState.game) {
+                gameState = GameState.pause;
+                Save();
+            } else if (gameState == GameState.pause) {
+                gameState = GameState.game;
+            }
+        }
 
-                if (!isPause) {
-                    Save();
-                }
+        if (gameState == GameState.game) {
+
+            ////////////////LEVEL ROTATION////////////////
+            if (input.LevelRight()) {
+                level.Right();
+
+                CheckShape();
+            } else if (input.LevelLeft()) {
+                level.Left();
+
+                CheckShape();
             }
 
-            if (isPause) {
+            ////////////////SHAPE ROTATION////////////////
+            if (input.ShapeRotate()) {
 
-                ////////////////LEVEL ROTATION////////////////
+                currentShape.CheckBounds();
 
-                if (input.LevelRight()) {
-                    level.Right();
-                } else if (input.LevelLeft()) {
-                    level.Left();
-                }
-
-                ////////////////SHAPE ROTATION////////////////
-                if (input.ShapeRotate()) {
-
-                    currentShape.CheckBounds();
-
-                    if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
-                        currentShape.Move( 1, 0 );
-                    }
-
-                    MatrixUtil.RotateRight( currentShape );
-
-                    if (level.Contain( currentShape.matrix )) {
-                        MatrixUtil.RotateLeft( currentShape );
-
-                    }
-                }
-
-                ////////////////SHAPE MOVE////////////////
-                if (input.ShapeLeft()) {
-
-                    currentShape.Move( -1, 0 );
-
-                    if (level.Contain( currentShape.matrix ) || !ValidSide) {
-                        currentShape.Move( 1, 0 );
-                    }
-                } else if (input.ShapeRight()) {
-
+                if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
                     currentShape.Move( 1, 0 );
-
-                    if (level.Contain( currentShape.matrix ) || !ValidSide) {
-                        currentShape.Move( -1, 0 );
-                    }
                 }
 
-                ////////////////SHAPE FALL////////////////
-                timer.Fasta = input.ShapeFall();
+                MatrixUtil.RotateRight( currentShape );
 
-                if (timer.isTime()) {
-                    currentShape.Move( 0, 1 );
+                if (level.Contain( currentShape.matrix )) {
+                    MatrixUtil.RotateLeft( currentShape );
 
-                    if (level.Contain( currentShape.matrix )) {
-                        currentShape.Move( 0, -1 );
-                        level.Add( currentShape );
-
-                        seat.Play();
-                        AddScore( currentShape.matrix.Count );
-                        AddScore( level.CheckDrops() * 3 );
-                        InitCurrent();
-                    }
-                }
-
-
-                if (UnderFloor) {
-
-                    AddScore( -currentShape.matrix.Count * 5 );
-                    InitCurrent();
-
-                }
-
-                int targetLevel = scores / 1000 + 1;
-
-                if (timer.currentLevel != targetLevel && targetLevel <= timer.maxLevel) {
-                    timer.currentLevel = targetLevel;
                 }
             }
-        } else {
+
+            ////////////////SHAPE MOVE////////////////
+            if (input.ShapeLeft()) {
+
+                currentShape.Move( -1, 0 );
+
+                if (level.Contain( currentShape.matrix ) || !ValidSide) {
+                    currentShape.Move( 1, 0 );
+                }
+            } else if (input.ShapeRight()) {
+
+                currentShape.Move( 1, 0 );
+
+                if (level.Contain( currentShape.matrix ) || !ValidSide) {
+                    currentShape.Move( -1, 0 );
+                }
+            }
+
+            ////////////////SHAPE FALL////////////////
+            timer.Fasta = input.ShapeFall();
+
+            if (timer.isTime()) {
+                currentShape.Move( 0, 1 );
+
+                if (level.Contain( currentShape.matrix )) {
+                    currentShape.Move( 0, -1 );
+
+                    level.Add( currentShape, (int)(Random.value * Level) );
+
+                    seat.Play();
+
+                    AddScore( currentShape.matrix.Count );
+                    AddScore( level.CheckDrops() * 3 );
+                    InitCurrent();
+                }
+            }
+
+
+            if (UnderFloor) {
+
+                AddScore( -currentShape.matrix.Count * 5 );
+                InitCurrent();
+
+            }
+
+            int targetLevel = scores / 1000 + 1;
+
+            if (timer.currentLevel != targetLevel && targetLevel <= timer.maxLevel) {
+                timer.currentLevel = targetLevel;
+            }
+
+        } else if (gameState != GameState.pause) {
             if (Input.anyKey || Input.touchCount > 0) {
                 GameStart();
             }
         }
 	}
 
+    void CheckShape() {
+        if (currentShape.Contain( level.levelShape.matrix )) {
+            level.Add( currentShape, 0 );
+            InitCurrent();
+        }
+    }
+
+
     void GameStart() {
-        if (!isGameOver) {
-            isGame = true;
-        } else if (canInit) {
+
+        if (canInit) {
+
             scores = 0;
             timer.currentLevel = 1;
+
             InitLevel();
+
+            notAdded = true;
         }
+
+        gameState = GameState.game;
     }
 
     void AddScore(int count) {
@@ -189,40 +223,20 @@ public class Game : MonoBehaviour {
 
         gameField.DrawBorder();
 
-        alpha = ( !isGameOver ? 1 : 0.2f );
+        alpha = ( gameState == GameState.game ? 1 : 0.2f );
 
         gameField.Draw( currentShape.matrix, alpha );
         gameField.Draw( level.levelShape.matrix, alpha );
     }
 
-    bool ValidSide {
-        get {
-            foreach (var pair in currentShape.matrix) {
-                if (pair.Key.x < 0 || pair.Key.x > gameField.wSize - 1) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
-    bool UnderFloor {
-        get {
-            foreach(var pair in currentShape.matrix) {
-                if (pair.Key.y < gameField.hSize - 1) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
     DataIO io;
     void Save() {
 
+        Debug.Log( "Save data" );
+
         DataIO.io.Save( new Data( scores, timer.currentLevel, level.levelShape.matrix, currentShape.matrix ) );
+        DataIO.io.Save( scoresContainer );
+
     }
 
     void Load() {
@@ -239,9 +253,57 @@ public class Game : MonoBehaviour {
 
             level.Align();
         }
+
+        scoresContainer = DataIO.io.Load<Scores>();
+
+        if (scoresContainer != null ) {
+            foreach (ScoresData s in scoresContainer.data) {
+                scoresList.Add( s.date + ":" + s.scores );
+            }
+        } else {
+            scoresContainer = new Scores();
+        }
     }
 
     void OnApplicationQuit() {
         Save();
+    }
+
+    bool ValidSide {
+        get {
+            foreach (var pair in currentShape.matrix) {
+                if (pair.Key.x < 0 || pair.Key.x > gameField.wSize - 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+    bool UnderFloor {
+        get {
+            foreach (var pair in currentShape.matrix) {
+                if (pair.Key.y < gameField.hSize - 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+    internal bool IsGameStart {
+        get {
+            return gameState == GameState.start;
+        }
+    }
+    internal bool IsPause {
+        get {
+            return gameState == GameState.pause;
+        }
+    }
+    internal bool IsGameOver {
+        get {
+            return gameState == GameState.over;
+        }
     }
 }

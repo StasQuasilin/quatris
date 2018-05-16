@@ -60,7 +60,9 @@ public class GameField : MonoBehaviour {
     public void DrawBorder() {
         GUI.DrawTexture( borderRect, border );
     }
-    
+
+    Color drawColor = Color.white;
+
 	public void Draw(Dictionary<Key2D, Color> matrix, float alpha) {
 
         GUI.BeginGroup( groupRect );
@@ -69,7 +71,12 @@ public class GameField : MonoBehaviour {
 
             if (pair.Key.x >= 0 && pair.Key.x <= wSize - 1) {
                 
-                GUI.color = new Color(pair.Value.r, pair.Value.g, pair.Value.b, alpha);
+                drawColor.r = pair.Value.r;
+                drawColor.g = pair.Value.g;
+                drawColor.b = pair.Value.b;
+                drawColor.a = alpha;
+
+                GUI.color = drawColor;
 
                 rect.x = pair.Key.x * cubeTexture.width * scale;
                 rect.y = pair.Key.y * cubeTexture.height * scale;

@@ -29,7 +29,7 @@ public class Colorizer : MonoBehaviour {
     }
 
     static float r, g, b;
-    static Color RandomColor() {
+    public static Color RandomColor() {
         r = Random.value;
         g = Random.value;
         b = Random.value;

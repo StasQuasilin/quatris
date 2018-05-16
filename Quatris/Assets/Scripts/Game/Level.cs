@@ -7,8 +7,22 @@ public class Level : MonoBehaviour {
     internal LevelShape levelShape;
     internal GameField gameField;
 
-    public void Add(Shape shape) {
+    public void Add(Shape shape, int addRandomPoints) {
         levelShape.Add(shape.matrix);
+
+        levelShape.CheckBounds();
+
+        for (int i = 0; i < addRandomPoints; i++) {
+
+            int rX = Random.Range( levelShape.minX, levelShape.maxX );
+            int rY = Random.Range( levelShape.minY, levelShape.maxY );
+
+            Key2D k = new Key2D( rX, rY );
+            if (!levelShape.Contain(k)) {
+                levelShape.Add( k, Colorizer.Instance.GetColor() );
+            }
+        }
+
         Align();
     }
 
@@ -19,6 +33,10 @@ public class Level : MonoBehaviour {
     public void Init(Shapes.ShapeValue values) {
         levelShape = new LevelShape(values, 0, 0);
         Align();
+    }
+
+    public bool Contain(Dictionary<Key2D, Color> mtrx) {
+        return levelShape.Contain( mtrx );
     }
 
     public void Align() {
@@ -37,27 +55,18 @@ public class Level : MonoBehaviour {
         }
     }
 
-    public bool Contain(Dictionary<Key2D, Color> mtrx) {
-        foreach (var pair in mtrx) {
-            if (levelShape.Contain(pair.Key)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    
 
     public int CheckDrops() {
 
-        int result = Check();
+        int result = 0;
 
-        Right();
-        Align();
+        for (int i = 0; i < 4; i++) {
+            result += Check();
 
-        result += Check();
-
-        Left();
-        Align();
+            Right();
+            Align();
+        }
 
         return result;
     }

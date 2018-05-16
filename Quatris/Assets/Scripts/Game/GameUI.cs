@@ -35,14 +35,14 @@ public class GameUI : MonoBehaviour {
 
     void Update() {
 
-        if (!game.isGameOver) {
+        if (!game.IsGameOver) {
 
-            if (gameStartLabel.draw != !game.isGame) {
-                gameStartLabel.draw = ( !game.isGame );
+            if (gameStartLabel.draw != game.IsGameStart) {
+                gameStartLabel.draw = ( game.IsGameStart );
             }
 
-            if (pauseLabel.draw != !game.isPause) {
-                pauseLabel.draw = ( !game.isPause );
+            if (pauseLabel.draw != game.IsPause) {
+                pauseLabel.draw = ( game.IsPause );
             }
 
             if (gameOverLabel.draw) {
@@ -57,8 +57,8 @@ public class GameUI : MonoBehaviour {
                 pauseLabel.draw = ( false );
             }
 
-            if (gameOverLabel.draw != game.isGameOver) {
-                gameOverLabel.draw = ( game.isGameOver );
+            if (gameOverLabel.draw != game.IsGameOver) {
+                gameOverLabel.draw = ( game.IsGameOver );
             }
         }
 
@@ -111,9 +111,9 @@ public class GameUI : MonoBehaviour {
 
         GUI.Label( r, game.Level.ToString(), labelStyle );
 
-        if (!game.isGame) {
+        if (!game.IsGameStart) {
 
-        } else if (game.isPause) {
+        } else if (game.IsPause) {
 
         }
     }
