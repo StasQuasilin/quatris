@@ -25,7 +25,7 @@ public class GameInput : MonoBehaviour {
 
         buttonStyle = new GUIStyle();
         buttonStyle.font = buttonFont;
-        buttonStyle.fontSize = 24;
+        buttonStyle.fontSize = 56;
         buttonStyle.alignment = TextAnchor.MiddleCenter;
         buttonStyle.normal.textColor = buttontTextColor;
         buttonStyle.active.textColor = buttontTextColor;
@@ -102,11 +102,11 @@ public class GameInput : MonoBehaviour {
 
     Rect r1, r2, r3, r4, r5, r6;
     void OnGUI() {
-        shapeFall =             GUI.RepeatButton( r3, "Down",       buttonStyle );
-        UpArrow.GUIInput =      GUI.RepeatButton( r4, "Up",         buttonStyle );
-        LeftArrow.GUIInput =    GUI.RepeatButton( r5, "Left A",     buttonStyle );
-        RightArrow.GUIInput =   GUI.RepeatButton( r6, "Right A",    buttonStyle );
-        AButton.GUIInput =      GUI.RepeatButton( r1, "Left B",     buttonStyle );
-        DButton.GUIInput =      GUI.RepeatButton( r2, "Right B",    buttonStyle );
+        shapeFall =             GUI.RepeatButton    ( r1, "▼",   buttonStyle );
+        UpArrow.GUIInput =      GUI.Button          ( r2, "↷",  buttonStyle );
+        LeftArrow.GUIInput =    GUI.Button          ( r3, "◀",  buttonStyle );
+        RightArrow.GUIInput =   GUI.Button          ( r4, "▶",  buttonStyle );
+        AButton.GUIInput =      GUI.RepeatButton    ( r5, "↺",  buttonStyle );
+        DButton.GUIInput =      GUI.RepeatButton    ( r6, "↻",  buttonStyle );
     }
 }
