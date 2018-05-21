@@ -39,6 +39,15 @@ public class Game : MonoBehaviour {
     internal bool notAdded = true;
 
     public AudioSource seat;
+    public AudioSource backMusic;
+
+    public static Game instance;
+
+    void Awake() {
+        if (instance == null) {
+            instance = this;
+        }
+    }
 
     void Start() {
 
@@ -98,8 +107,10 @@ public class Game : MonoBehaviour {
             if (gameState == GameState.game) {
                 gameState = GameState.pause;
                 Save();
+                backMusic.Stop();
             } else if (gameState == GameState.pause) {
                 gameState = GameState.game;
+                backMusic.Play();
             }
         }
 

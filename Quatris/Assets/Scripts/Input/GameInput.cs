@@ -96,17 +96,17 @@ public class GameInput : MonoBehaviour {
 
     public bool AnyKey {
         get {
-            return !Input.anyKeyDown && Input.touchCount == 0;
+            return !Input.anyKeyDown && Input.touchCount > 0;
         }
     }
 
     Rect r1, r2, r3, r4, r5, r6;
     void OnGUI() {
-        shapeFall =             GUI.RepeatButton    ( r1, "▼",   buttonStyle );
-        UpArrow.GUIInput =      GUI.Button          ( r2, "↷",  buttonStyle );
-        LeftArrow.GUIInput =    GUI.Button          ( r3, "◀",  buttonStyle );
-        RightArrow.GUIInput =   GUI.Button          ( r4, "▶",  buttonStyle );
-        AButton.GUIInput =      GUI.RepeatButton    ( r5, "↺",  buttonStyle );
-        DButton.GUIInput =      GUI.RepeatButton    ( r6, "↻",  buttonStyle );
+        shapeFall =             GUI.RepeatButton    ( r1, "Down",   buttonStyle );
+        UpArrow.GUIInput =      GUI.RepeatButton    ( r2, "Up",  buttonStyle );
+        LeftArrow.GUIInput =    GUI.RepeatButton    ( r3, "Left A",  buttonStyle );
+        RightArrow.GUIInput =   GUI.RepeatButton    ( r4, "Right B",  buttonStyle );
+        AButton.GUIInput =      GUI.RepeatButton    ( r5, "Left B",  buttonStyle );
+        DButton.GUIInput =      GUI.RepeatButton    ( r6, "Right B",  buttonStyle );
     }
 }

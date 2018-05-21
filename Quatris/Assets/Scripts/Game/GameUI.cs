@@ -15,9 +15,9 @@ public class GameUI : MonoBehaviour {
     Game game;
     GameField field;
 
-    public CustomLabel gameStartLabel;
-    public CustomLabel pauseLabel;
-    public CustomLabel gameOverLabel;
+    public ICustomLabel gameStartLabel;
+    public ICustomLabel pauseLabel;
+    public ICustomLabel gameOverLabel;
 
     void Awake() {
         game = FindObjectOfType<Game>();
@@ -69,7 +69,7 @@ public class GameUI : MonoBehaviour {
     Rect nR;
 	void OnGUI() {
         
-        r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 100, 20 );
+        r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 200, 20 );
 
         /////NEXT/////
         GUI.Label(r, "Next", labelStyle);

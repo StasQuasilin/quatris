@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 [ExecuteInEditMode]
-public class CustomLabel : MonoBehaviour {
+public class CustomLabel : ICustomLabel {
 
-    public bool draw;
+    
     public Content[] content;
 
     void OnGUI() {
