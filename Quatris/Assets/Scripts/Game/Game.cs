@@ -38,8 +38,13 @@ public class Game : MonoBehaviour {
     internal bool canInit = false;
     internal bool notAdded = true;
 
-    public AudioSource seat;
+    
     public AudioSource backMusic;
+    public AudioSource shapeMove, levelRotate;
+    public AudioSource drop;
+    public AudioSource shapeRotate;
+    public AudioSource pause;
+    public AudioSource lineDrop;
 
     public static Game instance;
 
@@ -105,6 +110,9 @@ public class Game : MonoBehaviour {
         if (input.Pause()) {
 
             if (gameState == GameState.game) {
+
+                pause.Play();
+
                 gameState = GameState.pause;
                 Save();
                 backMusic.Stop();
@@ -120,9 +128,13 @@ public class Game : MonoBehaviour {
             if (input.LevelRight()) {
                 level.Right();
 
+                levelRotate.Play();
+
                 CheckShape();
             } else if (input.LevelLeft()) {
                 level.Left();
+
+                levelRotate.Play();
 
                 CheckShape();
             }
@@ -140,7 +152,8 @@ public class Game : MonoBehaviour {
 
                 if (level.Contain( currentShape.matrix )) {
                     MatrixUtil.RotateLeft( currentShape );
-
+                } else {
+                    shapeRotate.Play();
                 }
             }
 
@@ -151,6 +164,8 @@ public class Game : MonoBehaviour {
 
                 if (level.Contain( currentShape.matrix ) || !ValidSide) {
                     currentShape.Move( 1, 0 );
+                } else {
+                    shapeMove.Play();
                 }
             } else if (input.ShapeRight()) {
 
@@ -158,6 +173,8 @@ public class Game : MonoBehaviour {
 
                 if (level.Contain( currentShape.matrix ) || !ValidSide) {
                     currentShape.Move( -1, 0 );
+                } else {
+                    shapeMove.Play();
                 }
             }
 
@@ -172,10 +189,16 @@ public class Game : MonoBehaviour {
 
                     level.Add( currentShape, (int)(Random.value * Level) );
 
-                    seat.Play();
+                    drop.Play();
 
                     AddScore( currentShape.matrix.Count );
-                    AddScore( level.CheckDrops() * 3 );
+                    int s = level.CheckDrops();
+                    AddScore( s * 3 );
+
+                    if (s > 0) {
+                        lineDrop.Play();
+                    }
+
                     InitCurrent();
                 }
             }
