@@ -53,6 +53,10 @@ public class Game : MonoBehaviour {
             gameField.InitLevel();
         }
 
+        if (level.GameOver) {
+            gameState = GameState.gameOver;
+            initNewGame = !input.AnyKey;
+        }
 
         if (gameState == GameState.gameOver) {
 
@@ -150,37 +154,21 @@ public class Game : MonoBehaviour {
 
         Debug.Log( "Save data" );
 
-//        DataIO.io.Save( new Data( 0, timer.currentLevel, level.levelShape.matrix, currentShape.matrix ) );
+        DataIO.io.Save( new Data( 0, timer.currentLevel, level.levelShape.matrix, gameField.currentShape.matrix ) );
 
     }
     void Load() {
-        /*
+
         Data data = DataIO.io.Load<Data>();
 
         if (data != null) {
+
             Debug.Log( "Load save game" );
 
-            //scores = data._scores;
             timer.currentLevel = data._level;
 
-            //InitLevel();
-
-            level.levelShape.Set( data.LevelData );
-            //currentShape.Set( data.ShapeData );
-
-            level.Align();
+            gameField.InitLevel(data.ShapeData, data.LevelData);
         }
-
-        scoresContainer = DataIO.io.Load<Scores>();
-
-        if (scoresContainer != null ) {
-            foreach (ScoresData s in scoresContainer.data) {
-                scoresList.Add( s.date + ":" + s.scores );
-            }
-        } else {
-            scoresContainer = new Scores();
-        }
-        */
     }
     void OnApplicationQuit() {
         Save();

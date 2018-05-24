@@ -53,7 +53,7 @@ public class GameUI : MonoBehaviour {
             gameOverLabel.Draw();
         }
 
-        /*
+        
         r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 200, 20 );
 
         /////NEXT/////
@@ -61,17 +61,17 @@ public class GameUI : MonoBehaviour {
 
         r.y += betweenLabelSpace *0.75f;
 
-        if (game.next != null) {
-            for (int i = 0, k = 0; i < game.next.xSize; i++) {
-                for (int j = 0; j < game.next.ySize; j++, k++) {
+        if (field.nextShape != null) {
+            for (int i = 0, k = 0; i < field.nextShape.xSize; i++) {
+                for (int j = 0; j < field.nextShape.ySize; j++, k++) {
 
                     nR = new Rect(
-                        r.x + (r.width - smallCube.width * game.next.xSize) / 2 + i * smallCube.width,
+                        r.x + (r.width - smallCube.width * field.nextShape.xSize) / 2 + i * smallCube.width,
                         r.y + j * smallCube.height,
                         smallCube.width,
                         smallCube.height);
 
-                    if (game.next.values[k]) {
+                    if (field.nextShape.values[k]) {
                         GUI.DrawTexture(nR, smallCube);
                     }
                 }
@@ -85,7 +85,7 @@ public class GameUI : MonoBehaviour {
 
         r.y += betweenLabelSpace / 2;
 
-        GUI.Label( r, game.scores.ToString(), labelStyle );
+        GUI.Label( r, "--", labelStyle );
 
         r.y += betweenLabelSpace;
         
@@ -94,13 +94,12 @@ public class GameUI : MonoBehaviour {
 
         r.y += betweenLabelSpace / 2;
 
-        GUI.Label( r, game.Level.ToString(), labelStyle );
+        GUI.Label( r, "--", labelStyle );
 
         if (!game.IsGameStart) {
 
         } else if (game.IsPause) {
 
         }
-        */
     }
 }

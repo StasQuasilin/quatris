@@ -37,7 +37,7 @@ public class PauseMenu : ICustomLabel {
         buttonRect.y += buttoneHeight + buttonSpace;
 
         if(GUI.Button(buttonRect, "Exit", style)) {
-            Application.CancelQuit();
+            Application.Quit();
         }
 
     }

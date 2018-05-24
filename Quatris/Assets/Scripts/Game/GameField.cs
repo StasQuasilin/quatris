@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameField : MonoBehaviour {
@@ -140,6 +141,13 @@ public class GameField : MonoBehaviour {
         get {
             return (int)(parameters.height * 0.8f);
         }
+    }
+
+    internal void InitLevel(Dictionary<Key2D, Color> shapeData, Dictionary<Key2D, Color> levelData) {
+        InitLevel();
+        currentShape.Set(shapeData);
+        level.levelShape.Set(levelData);
+        level.Align();
     }
 
     bool ValidSide {
