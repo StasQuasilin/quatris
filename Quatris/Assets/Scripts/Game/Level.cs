@@ -26,6 +26,14 @@ public class Level : MonoBehaviour {
         Align();
     }
 
+
+
+    public void Add(Key2D key) {
+        if (!levelShape.Contain( key )) {
+            levelShape.Add( key, Colorizer.Instance.GetColor());
+        }
+    }
+
     public void Init() {
         levelShape = new LevelShape( new Shapes.ShapeValue(), 0, 0 );
     }
@@ -43,7 +51,7 @@ public class Level : MonoBehaviour {
 
         levelShape.CheckBounds();
 
-        int hA = (gameField.wSize - (levelShape.minX + levelShape.maxX)) / 2;
+        int hA = (gameField.parameters.width - (levelShape.minX + levelShape.maxX)) / 2;
         int vA = gameField.FieldCenter - (levelShape.maxY - (levelShape.maxY - levelShape.minY) / 2);
 
         levelShape.Move(hA, vA);
@@ -81,7 +89,7 @@ public class Level : MonoBehaviour {
         for (int i = levelShape.minY; i < levelShape.maxY + 1;) {
             bool dropIt = true;
             //COLUMNS
-            for(int j = 0; j < gameField.wSize; j++) {
+            for(int j = 0; j < gameField.parameters.width; j++) {
                 if (!levelShape.Contain(new Key2D(j, i))) {
                     dropIt = false;
                     break;

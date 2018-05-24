@@ -33,42 +33,27 @@ public class GameUI : MonoBehaviour {
         labelStyle.alignment = TextAnchor.MiddleCenter;
     }
 
-    void Update() {
-
-        if (!game.IsGameOver) {
-
-            if (gameStartLabel.draw != game.IsGameStart) {
-                gameStartLabel.draw = ( game.IsGameStart );
-            }
-
-            if (pauseLabel.draw != game.IsPause) {
-                pauseLabel.draw = ( game.IsPause );
-            }
-
-            if (gameOverLabel.draw) {
-                gameOverLabel.draw = ( false );
-            }
-        } else {
-            if (gameStartLabel.draw) {
-                gameStartLabel.draw = ( false );
-            }
-
-            if (pauseLabel.draw) {
-                pauseLabel.draw = ( false );
-            }
-
-            if (gameOverLabel.draw != game.IsGameOver) {
-                gameOverLabel.draw = ( game.IsGameOver );
-            }
-        }
-
-        
-    }
-
     Rect r;
     Rect nR;
 	void OnGUI() {
-        
+
+        field.Draw();
+
+        GUI.color = Color.white;
+
+        if (game.IsGameStart) {
+            gameStartLabel.Draw();
+        }
+
+        if (game.IsPause) {
+            pauseLabel.Draw();
+        }
+
+        if (game.IsGameOver) {
+            gameOverLabel.Draw();
+        }
+
+        /*
         r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 200, 20 );
 
         /////NEXT/////
@@ -116,5 +101,6 @@ public class GameUI : MonoBehaviour {
         } else if (game.IsPause) {
 
         }
+        */
     }
 }

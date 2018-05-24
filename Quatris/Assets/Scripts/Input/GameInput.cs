@@ -101,7 +101,17 @@ public class GameInput : MonoBehaviour {
     }
 
     Rect r1, r2, r3, r4, r5, r6;
+    Color color = Color.white;
     void OnGUI() {
+
+        if (Screen.orientation == ScreenOrientation.Portrait) {
+            color.a = 0.2f;
+        } else {
+            color.a = 1f;
+        }
+
+        GUI.color = color;
+
         shapeFall =             GUI.RepeatButton    ( r1, "Down",   buttonStyle );
         UpArrow.GUIInput =      GUI.RepeatButton    ( r2, "Up",  buttonStyle );
         LeftArrow.GUIInput =    GUI.RepeatButton    ( r3, "Left A",  buttonStyle );

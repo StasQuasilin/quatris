@@ -6,13 +6,11 @@ public class CustomLabel : ICustomLabel {
     
     public Content[] content;
 
-    void OnGUI() {
+    public override void Draw() {
 
-        if (draw) {
-            if (content != null) {
-                foreach (Content c in content) {
-                    c.Draw();
-                }
+        if (content != null) {
+            foreach (Content c in content) {
+                c.Draw();
             }
         }
     }

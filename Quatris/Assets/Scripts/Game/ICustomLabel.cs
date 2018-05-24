@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ICustomLabel : MonoBehaviour {
-    public bool draw;
+    public abstract void Draw();
 }

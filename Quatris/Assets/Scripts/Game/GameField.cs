@@ -3,62 +3,106 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour {
 
-    public Texture2D cubeTexture;
-    public int wSize, hSize;
-    public int borderSize = 1;
+    public GameFieldParameters parameters;
 
-    public Color borderColor = Color.white;
-    public Color backgroundColor = Color.blue;
-    
+    Shapes shapeFactory;
+    Level level;
+
+    internal Shapes.ShapeValue nextShape;
+    internal Shape currentShape;
+    private Shape hiddenShape;
+
+
     float scale;
-    Rect rect;
+    Rect cubeRect;
     public Rect groupRect;
-    Rect borderRect;
+    
+    public void Init() {
+        Debug.Log( "Init game field" );
+        shapeFactory = FindObjectOfType<Shapes>();
+        level = FindObjectOfType<Level>();
+        level.gameField = this;
+        parameters.Init();
 
-    Texture2D border;
+        scale = parameters.Scale;
 
-    void Awake() {
-
-        CalcScale();
-        CreateBorder();
+        cubeRect = parameters.CubeRect;
+        groupRect = parameters.GroupRect;
 
     }
+    bool levelWasInitialized = false;
 
-    public void CreateBorder() {
-        
+    public void InitLevel() {
 
-        int mI = (int)(1f * wSize * cubeTexture.width * scale);
-        int mJ = (int)(1f * hSize * cubeTexture.height * scale);
+        level.Init( shapeFactory.GetShape() );
+        InitNext();
+        InitCurrent();
+        levelWasInitialized = true;
+        hiddenShape = new Shape( nextShape, 0, 0 );
 
-        border = new Texture2D( mI, mJ );
+        Debug.Log( "Level was initialized" );
+    }
 
-        for (int i = 0; i < mI; i++) {
-            for (int j = 0; j < mJ; j++) {
-                if (i < borderSize || j < borderSize || i > mI - borderSize - 1 || j > mJ - borderSize - 1) {
-                    border.SetPixel( i, j, borderColor );
-                } else {
-                    border.SetPixel( i, j, backgroundColor );
-                }
-            }
+    void InitNext() {
+        Debug.Log( "Init next shape" );
+        nextShape = shapeFactory.GetShape();
+    }
+
+    public void InitCurrent() {
+        Debug.Log( "Next shape is commin" );
+        currentShape = new Shape( nextShape, ( parameters.width - nextShape.xSize ) / 2, -nextShape.ySize / 2 );
+        InitNext();
+    }
+
+
+    public void RotateShape() {
+
+        hiddenShape.Set( currentShape.matrix );
+
+        currentShape.CheckBounds();
+
+        if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
+            currentShape.Move( 1, 0 );
         }
 
-        border.Apply();
+        MatrixUtil.RotateRight( currentShape );
 
-        borderRect = new Rect( groupRect );
-        borderRect.width += borderSize;
+        if (level.Contain( currentShape.matrix )) {
+            currentShape.Set( hiddenShape.matrix );
+        } else {
+            //todo play sound
+        }
+        
     }
 
-    void CalcScale() {
+    public void MoveShape(int x, int y) {
 
-        scale = 1f * (Screen.height - borderSize * 2)  / (hSize * cubeTexture.height);
+        hiddenShape.Set( currentShape.matrix );
+        currentShape.Move( x, y );
 
-        rect = new Rect(0, 0, cubeTexture.width * scale, cubeTexture.height * scale);
-        groupRect = new Rect( ( Screen.width - wSize * cubeTexture.width * scale ) / 2, borderSize, wSize * cubeTexture.width * scale, Screen.height - borderSize );
+        bool add = level.Contain( currentShape.matrix ) && x == 0;
 
+        if (!ValidSide || level.Contain( currentShape.matrix )) {
+            currentShape.Set( hiddenShape.matrix );
+        }
+
+        if (add) {
+            level.Add( currentShape, 0 );
+            InitCurrent();
+        }
+
+    }
+    
+    public void Draw() {
+        if (levelWasInitialized) {
+            DrawBorder();
+            Draw( level.levelShape.matrix, 1f );
+            Draw( currentShape.matrix, 1f );
+        }
     }
 
     public void DrawBorder() {
-        GUI.DrawTexture( borderRect, border );
+        GUI.DrawTexture( parameters.borderRect, parameters.border );
     }
 
     Color drawColor = Color.white;
@@ -69,7 +113,10 @@ public class GameField : MonoBehaviour {
         
         foreach (var pair in matrix) {
 
-            if (pair.Key.x >= 0 && pair.Key.x <= wSize - 1) {
+            if (
+                pair.Key.x >= 0 && 
+                pair.Key.x <= parameters.width - 1 && 
+                pair.Key.y <= parameters.height) {
                 
                 drawColor.r = pair.Value.r;
                 drawColor.g = pair.Value.g;
@@ -78,10 +125,10 @@ public class GameField : MonoBehaviour {
 
                 GUI.color = drawColor;
 
-                rect.x = pair.Key.x * cubeTexture.width * scale;
-                rect.y = pair.Key.y * cubeTexture.height * scale;
+                cubeRect.x = pair.Key.x * parameters.cubeTexture.width * scale;
+                cubeRect.y = pair.Key.y * parameters.cubeTexture.height * scale;
 
-                GUI.DrawTexture( rect, cubeTexture );
+                GUI.DrawTexture( cubeRect, parameters.cubeTexture );
             }
         }
 
@@ -91,9 +138,96 @@ public class GameField : MonoBehaviour {
 
     public int FieldCenter {
         get {
-            return (int)(hSize * 0.8f);
+            return (int)(parameters.height * 0.8f);
         }
     }
 
-    
+    bool ValidSide {
+        get {
+            foreach (var pair in currentShape.matrix) {
+                if (pair.Key.x < 0 || pair.Key.x > parameters.width - 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+    public bool UnderFloor {
+        get {
+            foreach (var pair in currentShape.matrix) {
+                if (pair.Key.y < parameters.height - 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+}
+
+[System.Serializable]
+public class GameFieldParameters {
+
+    public Texture2D cubeTexture;
+    internal Texture2D border;
+    public int width;
+    public int height;
+
+    public int borderWidth = 1;
+    public Color borderColor = Color.white;
+    public Color backgroundColor = Color.blue;
+    internal Rect borderRect;
+
+    public void Init() {
+
+        if (Screen.width > Screen.height) {
+            height = width * Screen.width / Screen.height;
+        } else {
+            height = width * Screen.height / Screen.width;
+        }
+
+        InitBorder();
+    }
+
+    void InitBorder() {
+        int mI = ( int ) ( 1f * width * cubeTexture.width * Scale );
+        int mJ = ( int ) ( 1f * height * cubeTexture.height * Scale );
+
+        border = new Texture2D( mI, mJ );
+
+        for (int i = 0; i < mI; i++) {
+            for (int j = 0; j < mJ; j++) {
+                if (i < borderWidth || j < borderWidth || i > mI - borderWidth - 1 || j > mJ - borderWidth - 1) {
+                    border.SetPixel( i, j, borderColor );
+                } else {
+                    border.SetPixel( i, j, backgroundColor );
+                }
+            }
+        }
+
+        border.Apply();
+        borderRect = new Rect( GroupRect );
+        borderRect.x -= borderWidth;
+        borderRect.width += borderWidth;
+    }
+
+    public float Scale {
+        get {
+            return 1f * ( Screen.height - borderWidth * 2 ) / ( height * cubeTexture.height ); ;
+        }
+    }
+
+    public Rect CubeRect {
+        get {
+            return new Rect( 0, 0, cubeTexture.width * Scale, cubeTexture.height * Scale );
+        }
+    }
+
+    public Rect GroupRect {
+        get {
+            return new Rect( ( Screen.width - width * cubeTexture.width * Scale ) / 2, borderWidth, width * cubeTexture.width * Scale, Screen.height - borderWidth );
+        }
+    }
 }

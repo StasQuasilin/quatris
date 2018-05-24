@@ -25,23 +25,19 @@ public class PauseMenu : ICustomLabel {
     public int buttoneHeight = 20;
     public int buttonSpace = 2;
 
-	void OnGUI() {
+	public override void Draw() {
 
-        if (draw) {
 
-            buttonRect = new Rect((Screen.width - buttonWidth) / 2, (Screen.height - (buttoneHeight * 3) - buttonSpace * 2) / 2, buttonWidth, buttoneHeight);
+        buttonRect = new Rect((Screen.width - buttonWidth) / 2, (Screen.height - (buttoneHeight * 2) - buttonSpace * 1) / 2, buttonWidth, buttoneHeight);
 
-            if (GUI.Button(buttonRect, "Continue", style)) {
-                game.gameState = Game.GameState.game;
-            }
+        if (GUI.Button(buttonRect, "Continue", style)) {
+            game.gameState = Game.GameState.game;
+        }
 
-            buttonRect.y += buttoneHeight + buttonSpace;
+        buttonRect.y += buttoneHeight + buttonSpace;
 
-            GUI.Button(buttonRect, "New Game", style);
-
-            buttonRect.y += buttoneHeight + buttonSpace;
-
-            GUI.Button(buttonRect, "Exit", style);
+        if(GUI.Button(buttonRect, "Exit", style)) {
+            Application.CancelQuit();
         }
 
     }
