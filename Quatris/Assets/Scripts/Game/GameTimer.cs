@@ -5,6 +5,19 @@ using UnityEngine;
 [System.Serializable]
 public class GameTimer {
 
+    private static GameTimer timer;
+
+    public static GameTimer Timer {
+        get {
+            if (timer == null) {
+                timer = new GameTimer();
+            }
+            return timer;
+        }
+    }
+
+    private GameTimer() { }
+
     public int currentLevel = 1;
     public int maxLevel = 10;
     public float speedScale = 1;

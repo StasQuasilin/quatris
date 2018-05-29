@@ -2,11 +2,14 @@
 using UnityEngine;
 
 public class Game : MonoBehaviour {
-    
+
+    public Sounds sounds;
     GameField gameField;
-    public GameTimer timer;
+    public GameTimer timer = GameTimer.Timer;
     GameInput input;
     Level level;
+
+    ScoresContainer scores;
 
     public enum GameState {
         novo,
@@ -16,8 +19,8 @@ public class Game : MonoBehaviour {
         gameOver
     }
 
-    internal GameState gameState = GameState.start;
-    internal bool initNewGame = false;
+    public GameState gameState = GameState.start;
+    public bool initNewGame = false;
 
     public static Game instance;
 
@@ -31,13 +34,19 @@ public class Game : MonoBehaviour {
 
         Debug.Log( "Game start" );
 
+        scores = ScoresContainer.Instance;
+
+        if (sounds == null) {
+            sounds = FindObjectOfType<Sounds>();
+        }
+
         level = FindObjectOfType<Level>();
         if (level == null) {
             level = gameObject.AddComponent<Level>();
         }
 
         gameField = FindObjectOfType<GameField>();
-        gameField.Init();
+        gameField.InitGameField();
 
         input = FindObjectOfType<GameInput>();
         if(input == null) {
@@ -55,13 +64,14 @@ public class Game : MonoBehaviour {
 
         if (level.GameOver) {
             gameState = GameState.gameOver;
-            initNewGame = !input.AnyKey;
-        }
 
-        if (gameState == GameState.gameOver) {
 
-            initNewGame = !input.AnyKey;
-            
+            if (!initNewGame) {
+                initNewGame = !input.AnyKey;
+            } else if (input.AnyKey) {
+                GameStart();
+            }
+
         } else {
             if (input.Pause()) {
 
@@ -75,37 +85,31 @@ public class Game : MonoBehaviour {
                     Debug.Log( "Game continued" );
                     gameState = GameState.game;
                 }
+
+                sounds.Pause();
             }
 
             if (gameState == GameState.game) {
 
-                GameInput();
+                CheckInput();
 
-                if (gameField.UnderFloor) {
-                    Debug.Log( "Lose shape" );
-
-                    gameField.InitCurrent();
-
-                }
-
-            }
-        }
-
-        if (gameState == GameState.start || gameState == GameState.gameOver) {
-            if (Input.anyKey || Input.touchCount > 0) {
+            } else if (input.AnyKey) {
                 GameStart();
             }
         }
 	}
 
-    void GameInput() {
+    void CheckInput() {
+
         ////////////////LEVEL ROTATION////////////////
         if (input.LevelRight()) {
             level.Right();
+            sounds.LevelRotate();
         }
 
         if (input.LevelLeft()) {
             level.Left();
+            sounds.LevelRotate();
         }
 
         ////////////////SHAPE ROTATION////////////////
@@ -138,12 +142,16 @@ public class Game : MonoBehaviour {
 
     void GameStart() {
 
-        Debug.Log( "Game start" );
-
         if (initNewGame) {
+
             Debug.Log( "Init new game" );
 
-            
+            gameField.ReloadField();
+            initNewGame = false;
+
+
+        } else {
+            Debug.Log( "Game start" );
         }
 
         gameState = GameState.game;
@@ -154,7 +162,7 @@ public class Game : MonoBehaviour {
 
         Debug.Log( "Save data" );
 
-        DataIO.io.Save( new Data( 0, timer.currentLevel, level.levelShape.matrix, gameField.currentShape.matrix ) );
+        DataIO.io.Save( new Data( scores.Scores, timer.currentLevel, level.levelShape.matrix, gameField.currentShape.matrix ) );
 
     }
     void Load() {
@@ -164,6 +172,8 @@ public class Game : MonoBehaviour {
         if (data != null) {
 
             Debug.Log( "Load save game" );
+
+            scores.Scores = data._scores;
 
             timer.currentLevel = data._level;
 

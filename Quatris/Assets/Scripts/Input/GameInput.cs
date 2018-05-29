@@ -96,7 +96,7 @@ public class GameInput : MonoBehaviour {
 
     public bool AnyKey {
         get {
-            return !Input.anyKeyDown && Input.touchCount > 0;
+            return Input.anyKey || Input.touchCount > 0;
         }
     }
 

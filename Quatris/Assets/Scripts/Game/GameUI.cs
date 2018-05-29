@@ -9,6 +9,8 @@ public class GameUI : MonoBehaviour {
     public int fontSize = 18;
     public Color textColor = Color.white;
     public int betweenLabelSpace = 22;
+    ScoresContainer scores;
+    GameTimer timer = GameTimer.Timer;
 
     GUIStyle labelStyle;
 
@@ -22,6 +24,7 @@ public class GameUI : MonoBehaviour {
     void Awake() {
         game = FindObjectOfType<Game>();
         field = FindObjectOfType<GameField>();
+        scores = ScoresContainer.Instance;
     }
 
     void Start() {
@@ -85,7 +88,7 @@ public class GameUI : MonoBehaviour {
 
         r.y += betweenLabelSpace / 2;
 
-        GUI.Label( r, "--", labelStyle );
+        GUI.Label( r, scores.Scores.ToString(), labelStyle );
 
         r.y += betweenLabelSpace;
         
@@ -94,7 +97,7 @@ public class GameUI : MonoBehaviour {
 
         r.y += betweenLabelSpace / 2;
 
-        GUI.Label( r, "--", labelStyle );
+        GUI.Label( r, timer.currentLevel.ToString(), labelStyle );
 
         if (!game.IsGameStart) {
 

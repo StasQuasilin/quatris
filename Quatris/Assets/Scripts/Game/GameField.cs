@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour {
 
+    public Sounds sounds;
     public GameFieldParameters parameters;
+    ScoresContainer scores;
 
     Shapes shapeFactory;
     Level level;
@@ -16,10 +18,18 @@ public class GameField : MonoBehaviour {
 
     float scale;
     Rect cubeRect;
-    public Rect groupRect;
-    
-    public void Init() {
+    internal Rect groupRect;
+
+    bool reloadField;
+    bool levelWasInitialized = false;
+    GameOverReload reload;
+
+    public void InitGameField() {
+
         Debug.Log( "Init game field" );
+        scores = ScoresContainer.Instance;
+
+        sounds = FindObjectOfType<Sounds>();
         shapeFactory = FindObjectOfType<Shapes>();
         level = FindObjectOfType<Level>();
         level.gameField = this;
@@ -30,18 +40,52 @@ public class GameField : MonoBehaviour {
         cubeRect = parameters.CubeRect;
         groupRect = parameters.GroupRect;
 
+        reload = new GameOverReload( parameters.height );
     }
-    bool levelWasInitialized = false;
 
     public void InitLevel() {
 
-        level.Init( shapeFactory.GetShape() );
-        InitNext();
-        InitCurrent();
-        levelWasInitialized = true;
-        hiddenShape = new Shape( nextShape, 0, 0 );
+        if (!reloadField) {
+
+            level.Init( shapeFactory.GetShape() );
+            InitNext();
+            InitCurrent();
+            levelWasInitialized = true;
+            hiddenShape = new Shape( nextShape, 0, 0 );
+        }
 
         Debug.Log( "Level was initialized" );
+    }
+
+    public void ReloadField() {
+        reloadField = true;
+        reload.init();
+    }
+
+    void Update() {
+        if (reloadField) {
+            if (!reload.Ready) {
+
+                if (reload.Time) {
+
+                    int r = reload.Row;
+                    
+                    for (int i = 0; i < parameters.width; i++) {
+                        if (reload.Dir == -1) {
+                            level.Add( new Key2D( i, r ) );
+                        } else {
+                            level.Remove( new Key2D( i, r ) );
+                        }
+                    }
+                }
+
+            } else {
+                reloadField = false;
+                Game.instance.gameState = Game.GameState.game;
+                Game.instance.initNewGame = false;
+                InitLevel();
+            }
+        }
     }
 
     void InitNext() {
@@ -54,7 +98,6 @@ public class GameField : MonoBehaviour {
         currentShape = new Shape( nextShape, ( parameters.width - nextShape.xSize ) / 2, -nextShape.ySize / 2 );
         InitNext();
     }
-
 
     public void RotateShape() {
 
@@ -71,7 +114,7 @@ public class GameField : MonoBehaviour {
         if (level.Contain( currentShape.matrix )) {
             currentShape.Set( hiddenShape.matrix );
         } else {
-            //todo play sound
+            sounds.ShapeRotate();
         }
         
     }
@@ -85,11 +128,30 @@ public class GameField : MonoBehaviour {
 
         if (!ValidSide || level.Contain( currentShape.matrix )) {
             currentShape.Set( hiddenShape.matrix );
+        } else {
+            sounds.ShapeMove();
         }
 
         if (add) {
+
+            scores.Add( currentShape.matrix.Count );
+
             level.Add( currentShape, 0 );
+
+            int drop = level.CheckDrops();
+
+            if (drop != 0) {
+                Debug.Log( "Drop " + drop + " lines" );
+                scores.Add( drop * 3 );
+                sounds.LineDrop();
+            }
+
             InitCurrent();
+        } else if (UnderFloor) {
+
+            Debug.Log( "Lose shape" );
+            scores.Add( -currentShape.matrix.Count * 5 );
+
         }
 
     }
@@ -98,7 +160,9 @@ public class GameField : MonoBehaviour {
         if (levelWasInitialized) {
             DrawBorder();
             Draw( level.levelShape.matrix, 1f );
-            Draw( currentShape.matrix, 1f );
+            if (!reloadField || reload.Dir == -1) {
+                Draw( currentShape.matrix, 1f );
+            }
         }
     }
 
@@ -161,6 +225,7 @@ public class GameField : MonoBehaviour {
             return true;
         }
     }
+
     public bool UnderFloor {
         get {
             foreach (var pair in currentShape.matrix) {
@@ -218,7 +283,9 @@ public class GameFieldParameters {
         border.Apply();
         borderRect = new Rect( GroupRect );
         borderRect.x -= borderWidth;
+        borderRect.y -= borderWidth;
         borderRect.width += borderWidth;
+        borderRect.height += borderWidth;
     }
 
     public float Scale {
@@ -236,6 +303,67 @@ public class GameFieldParameters {
     public Rect GroupRect {
         get {
             return new Rect( ( Screen.width - width * cubeTexture.width * Scale ) / 2, borderWidth, width * cubeTexture.width * Scale, Screen.height - borderWidth );
+        }
+    }
+}
+
+class GameOverReload {
+    int height;
+    public float reloadSpeed;
+    float lastTime;
+    int dir = -1;
+    int r;
+    int linesUpdate;
+
+    public GameOverReload(int height, float reloadSpeed = 0.05f) {
+        this.height = height;
+        this.reloadSpeed = reloadSpeed;
+    }
+
+    public void init() {
+        r = height;
+        linesUpdate = 0;
+    }
+
+    public bool Ready {
+        get {
+            return linesUpdate == height * 2 + 2;
+        }
+    } 
+
+    public bool Time {
+        get {
+            if (UnityEngine.Time.time > lastTime + reloadSpeed) {
+
+                lastTime = UnityEngine.Time.time;
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    public int Row {
+        get {
+            r += dir;
+
+            if (r == -1) {
+                dir = 1;
+            }
+
+            if (r == height +1 ) {
+                dir = -1;
+            }
+
+            linesUpdate++;
+
+            return r;
+        }
+    }
+
+    public int Dir {
+        get {
+            return dir;
         }
     }
 }

@@ -34,6 +34,10 @@ public class Level : MonoBehaviour {
         }
     }
 
+    public void Remove(Key2D key) {
+        levelShape.matrix.Remove( key );
+    }
+
     public void Init() {
         levelShape = new LevelShape( new Shapes.ShapeValue(), 0, 0 );
     }
