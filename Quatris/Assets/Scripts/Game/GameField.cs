@@ -120,7 +120,6 @@ public class GameField : MonoBehaviour {
     }
 
     public void MoveShape(int x, int y) {
-
         hiddenShape.Set( currentShape.matrix );
         currentShape.Move( x, y );
 
@@ -147,11 +146,12 @@ public class GameField : MonoBehaviour {
             }
 
             InitCurrent();
+
         } else if (UnderFloor) {
 
             Debug.Log( "Lose shape" );
             scores.Add( -currentShape.matrix.Count * 5 );
-
+            InitCurrent();
         }
 
     }

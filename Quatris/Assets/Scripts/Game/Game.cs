@@ -87,13 +87,13 @@ public class Game : MonoBehaviour {
                 }
 
                 sounds.Pause();
-            }
+            } else 
 
             if (gameState == GameState.game) {
 
                 CheckInput();
 
-            } else if (input.AnyKey) {
+            } else if (gameState != GameState.pause && input.AnyKey) {
                 GameStart();
             }
         }
@@ -132,9 +132,10 @@ public class Game : MonoBehaviour {
         }
 
         ////////////////SHAPE FALL////////////////
+
         timer.Fasta = input.ShapeFall();
 
-        if (timer.isTime()) {
+        if (timer.isTime) {
             gameField.MoveShape( 0, 1 );
         }
     }
