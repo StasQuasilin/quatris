@@ -120,12 +120,7 @@ public class GameField : MonoBehaviour {
     }
 
     public void MoveShape(int x, int y) {
-<<<<<<< HEAD
 
-        Debug.Log(string.Format("Move shape {0}x{1}", x, y));
-
-=======
->>>>>>> 77bf3579bca5b739193ed2b7e3fc21371ea84de0
         hiddenShape.Set( currentShape.matrix );
         currentShape.Move( x, y );
 

@@ -95,15 +95,12 @@ public class Game : MonoBehaviour {
             if (gameState == GameState.game) {
                 CheckInput();
 
-<<<<<<< HEAD
                 int targetLevel = scores.Scores / 1000 + 1;
 
                 if (timer.currentLevel != targetLevel) {
                     timer.currentLevel = targetLevel;
                 }
 
-=======
->>>>>>> 77bf3579bca5b739193ed2b7e3fc21371ea84de0
             } else if (gameState != GameState.pause && input.AnyKey) {
                 GameStart();
             }
