@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -22,17 +21,18 @@ public class GameTimer {
     public int maxLevel = 10;
     public float speedScale = 1;
 
-    float speed;
-    float lastTime;
+    float speed = 0.1f;
+    float lastTime = 0;
 
-    public bool isTime() {
+    public bool isTime {
+        get {
+            if (Time.time > lastTime + speed) {
+                lastTime = Time.time;
+                return true;
+            }
 
-        if (Time.time > lastTime + speed) {
-            lastTime = Time.time;
-            return true;
+            return false;
         }
-
-        return false;
     }
 
     public bool Fasta {

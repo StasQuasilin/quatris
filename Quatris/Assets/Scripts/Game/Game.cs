@@ -90,17 +90,20 @@ public class Game : MonoBehaviour {
                 }
 
                 sounds.Pause();
-            }
+            } else 
 
             if (gameState == GameState.game) {
                 CheckInput();
 
+<<<<<<< HEAD
                 int targetLevel = scores.Scores / 1000 + 1;
 
                 if (timer.currentLevel != targetLevel) {
                     timer.currentLevel = targetLevel;
                 }
 
+=======
+>>>>>>> 77bf3579bca5b739193ed2b7e3fc21371ea84de0
             } else if (gameState != GameState.pause && input.AnyKey) {
                 GameStart();
             }
@@ -140,9 +143,10 @@ public class Game : MonoBehaviour {
         }
 
         ////////////////SHAPE FALL////////////////
+
         timer.Fasta = input.ShapeFall();
 
-        if (timer.isTime()) {
+        if (timer.isTime) {
             gameField.MoveShape( 0, 1 );
         }
     }
