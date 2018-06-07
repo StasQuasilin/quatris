@@ -6,8 +6,10 @@ public class PauseMenu : ICustomLabel {
     public Font font;
     private GUIStyle style;
     Game game;
+    Sounds sounds;
 
     void Awake() {
+        sounds = FindObjectOfType<Sounds>();
         style = new GUIStyle();
         style.font = font;
         style.fontSize = 56;
@@ -32,6 +34,7 @@ public class PauseMenu : ICustomLabel {
 
         if (GUI.Button(buttonRect, "Continue", style)) {
             game.gameState = Game.GameState.game;
+            sounds.Pause();
         }
 
         buttonRect.y += buttoneHeight + buttonSpace;

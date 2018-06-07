@@ -73,31 +73,39 @@ public class Game : MonoBehaviour {
             }
 
         } else {
+            // IF NOT GAME OVER
             if (input.Pause()) {
 
                 if (gameState == GameState.game) {
-                    Debug.Log( "Game was paused" );
 
+                    Debug.Log( "Game was paused" );
                     gameState = GameState.pause;
 
                     Save();
                 } else if (gameState == GameState.pause) {
+
                     Debug.Log( "Game continued" );
                     gameState = GameState.game;
+
                 }
 
                 sounds.Pause();
             }
 
             if (gameState == GameState.game) {
-
                 CheckInput();
 
-            } else if (input.AnyKey) {
+                int targetLevel = scores.Scores / 1000 + 1;
+
+                if (timer.currentLevel != targetLevel) {
+                    timer.currentLevel = targetLevel;
+                }
+
+            } else if (gameState != GameState.pause && input.AnyKey) {
                 GameStart();
             }
-        }
-	}
+        } 
+    }
 
     void CheckInput() {
 
@@ -147,14 +155,18 @@ public class Game : MonoBehaviour {
             Debug.Log( "Init new game" );
 
             gameField.ReloadField();
+            scores.Scores = 0;
+            
             initNewGame = false;
 
 
         } else {
             Debug.Log( "Game start" );
+
+            gameState = GameState.game;
         }
 
-        gameState = GameState.game;
+        
     }
     
     DataIO io;

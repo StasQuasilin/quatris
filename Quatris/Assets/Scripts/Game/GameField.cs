@@ -121,6 +121,8 @@ public class GameField : MonoBehaviour {
 
     public void MoveShape(int x, int y) {
 
+        Debug.Log(string.Format("Move shape {0}x{1}", x, y));
+
         hiddenShape.Set( currentShape.matrix );
         currentShape.Move( x, y );
 
@@ -128,7 +130,7 @@ public class GameField : MonoBehaviour {
 
         if (!ValidSide || level.Contain( currentShape.matrix )) {
             currentShape.Set( hiddenShape.matrix );
-        } else {
+        } else if (y == 0) {
             sounds.ShapeMove();
         }
 

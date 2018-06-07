@@ -10,7 +10,7 @@ public class GameInput : MonoBehaviour {
     public Font buttonFont;
     public Color buttontTextColor = Color.white;
 
-    public float[] delays;
+    public float[] delays, delay2;
     bool shapeFall;
 
     GUIStyle buttonStyle;
@@ -20,8 +20,8 @@ public class GameInput : MonoBehaviour {
         LeftArrow = new GameButton  ( KeyCode   .LeftArrow,     delays );
         RightArrow = new GameButton ( KeyCode   .RightArrow,    delays );
         UpArrow = new GameButton    ( KeyCode   .UpArrow,       delays );
-        AButton = new GameButton    ( KeyCode   .A,             delays );
-        DButton = new GameButton    ( KeyCode   .D,             delays );
+        AButton = new GameButton(KeyCode.A, delay2);
+        DButton = new GameButton(KeyCode.D, delay2);
 
         buttonStyle = new GUIStyle();
         buttonStyle.font = buttonFont;
