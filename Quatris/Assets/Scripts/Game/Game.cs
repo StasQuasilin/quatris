@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Advertisements;
 
 public class Game : MonoBehaviour {
 
@@ -30,6 +30,8 @@ public class Game : MonoBehaviour {
         }
     }
 
+    private string gameId = "1800917";
+
     void Start() {
 
         Debug.Log( "Game start" );
@@ -53,10 +55,54 @@ public class Game : MonoBehaviour {
             input = gameObject.AddComponent<GameInput>();
         }
 
+#if UNITY_EDITOR
+        if (Advertisement.isSupported) {
+            Advertisement.Initialize( gameId, true );
+        }
+#elif UNITY_ANDROID
+        if (Advertisement.isSupported) {
+            Advertisement.Initialize( gameId, false );
+        }
+#endif
+
         Load();
+        initNextScores(500);
     }
-	
-	void Update () {
+    public int nextScores = 10;
+    void ShowRevardAd() {
+        if (scores.Scores >= nextScores) {
+            if (Advertisement.IsReady( "rewardedVideo" )) {
+                ShowOptions options = new ShowOptions { resultCallback = HandleShowResult };
+                Advertisement.Show( "rewardVideo", options );
+            }
+        }
+    }
+
+    void initNextScores(int step) {
+        nextScores = scores.Scores + 1000 + (int)(Random.value * step );
+    }
+
+    private void HandleShowResult(ShowResult result) {
+        switch (result) {
+            case ShowResult.Finished:
+                initNextScores( 1000 );
+                break;
+            case ShowResult.Skipped:
+                initNextScores( 0 );
+                break;
+            case ShowResult.Failed:
+                Debug.LogError( "Ad failed to show" );
+                initNextScores( 0 );
+                break;
+        }
+    }
+    public float time;
+
+    void Update () {
+
+        time = Time.time;
+
+        ShowRevardAd();
 
         if (level.IsEmpty) {
             gameField.InitLevel();
@@ -95,15 +141,12 @@ public class Game : MonoBehaviour {
             if (gameState == GameState.game) {
                 CheckInput();
 
-<<<<<<< HEAD
                 int targetLevel = scores.Scores / 1000 + 1;
 
                 if (timer.currentLevel != targetLevel) {
                     timer.currentLevel = targetLevel;
                 }
 
-=======
->>>>>>> 77bf3579bca5b739193ed2b7e3fc21371ea84de0
             } else if (gameState != GameState.pause && input.AnyKey) {
                 GameStart();
             }
@@ -194,6 +237,9 @@ public class Game : MonoBehaviour {
             timer.currentLevel = data._level;
 
             gameField.InitLevel(data.ShapeData, data.LevelData);
+        } else {
+            //todo show demo
+            
         }
     }
     void OnApplicationQuit() {

@@ -21,8 +21,8 @@ public class GameTimer {
     public int maxLevel = 10;
     public float speedScale = 1;
 
-    float speed = 0.1f;
-    float lastTime = 0;
+    public float speed = 0.1f;
+    public float lastTime = 0;
 
     public bool isTime {
         get {
