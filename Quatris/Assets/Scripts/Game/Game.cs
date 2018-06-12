@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Advertisements;
 
 public class Game : MonoBehaviour {
 
@@ -12,7 +11,7 @@ public class Game : MonoBehaviour {
     ScoresContainer scores;
 
     public enum GameState {
-        novo,
+        help,
         start,
         pause,
         game,
@@ -30,7 +29,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private string gameId = "1800917";
+    public AdShow adShow;
 
     void Start() {
 
@@ -55,6 +54,7 @@ public class Game : MonoBehaviour {
             input = gameObject.AddComponent<GameInput>();
         }
 
+<<<<<<< HEAD
 #if UNITY_EDITOR
         if (Advertisement.isSupported) {
             Advertisement.Initialize( gameId, false );
@@ -76,33 +76,35 @@ public class Game : MonoBehaviour {
                 Advertisement.Show( "rewardVideo", options );
             }
         }
-    }
+=======
+        Load();
 
+        adShow = FindObjectOfType<AdShow>();
+        initNextScores();
+        
+>>>>>>> ff369e670d4b83d5c2abedbbda30bdbd53f43b0f
+    }
+    public int showScores = 10;
+
+<<<<<<< HEAD
     void initNextScores(int step) {
         nextScores = scores.Scores + 10 + (int)(Random.value * step );
+=======
+    void initNextScores() {
+        showScores = scores.Scores + 1000 + (int)(Random.value * 500);
+>>>>>>> ff369e670d4b83d5c2abedbbda30bdbd53f43b0f
     }
 
-    private void HandleShowResult(ShowResult result) {
-        switch (result) {
-            case ShowResult.Finished:
-                initNextScores( 1000 );
-                break;
-            case ShowResult.Skipped:
-                initNextScores( 0 );
-                break;
-            case ShowResult.Failed:
-                Debug.LogError( "Ad failed to show" );
-                initNextScores( 0 );
-                break;
+    public void ShowAd() {
+        if (scores.Scores >= showScores) {
+            adShow.ShowRewardedAd();
+            initNextScores();
         }
     }
-    public float time;
-
+    
     void Update () {
 
-        time = Time.time;
-
-        ShowRevardAd();
+        ShowAd();
 
         if (level.IsEmpty) {
             gameField.InitLevel();
@@ -128,6 +130,7 @@ public class Game : MonoBehaviour {
                     gameState = GameState.pause;
 
                     Save();
+
                 } else if (gameState == GameState.pause) {
 
                     Debug.Log( "Game continued" );
@@ -138,7 +141,7 @@ public class Game : MonoBehaviour {
                 sounds.Pause();
             } else 
 
-            if (gameState == GameState.game) {
+            if (gameState == GameState.game && !adShow.IsShow) {
                 CheckInput();
 
                 int targetLevel = scores.Scores / 1000 + 1;
@@ -203,7 +206,7 @@ public class Game : MonoBehaviour {
 
             gameField.ReloadField();
             scores.Scores = 0;
-            
+            initNextScores();
             initNewGame = false;
 
 
@@ -212,7 +215,6 @@ public class Game : MonoBehaviour {
 
             gameState = GameState.game;
         }
-
         
     }
     
@@ -238,8 +240,7 @@ public class Game : MonoBehaviour {
 
             gameField.InitLevel(data.ShapeData, data.LevelData);
         } else {
-            //todo show demo
-            
+            gameState = GameState.help;
         }
     }
     void OnApplicationQuit() {
@@ -258,6 +259,12 @@ public class Game : MonoBehaviour {
     internal bool IsGameOver {
         get {
             return gameState == GameState.gameOver;
+        }
+    }
+
+    internal bool isHelp {
+        get {
+            return gameState == GameState.help;
         }
     }
 }

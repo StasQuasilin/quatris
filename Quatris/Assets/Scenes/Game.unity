@@ -160,14 +160,14 @@ MonoBehaviour:
     textColor: {r: 1, g: 1, b: 1, a: 1}
     fontStyle: 0
     aligment: 4
-    offset: {x: 0, y: -20}
+    offset: {x: 0, y: -55}
   - text: Over
     font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
     fontSize: 156
     textColor: {r: 1, g: 1, b: 1, a: 1}
     fontStyle: 0
     aligment: 4
-    offset: {x: 0, y: 20}
+    offset: {x: 0, y: 55}
 --- !u!1 &514372479
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +203,7 @@ MonoBehaviour:
   gameStartLabel: {fileID: 2061828680}
   pauseLabel: {fileID: 1424300724}
   gameOverLabel: {fileID: 118304663}
+  helpLabel: {fileID: 897552432}
 --- !u!4 &514372481
 Transform:
   m_ObjectHideFlags: 0
@@ -313,6 +314,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &897552429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 897552430}
+  - component: {fileID: 897552432}
+  m_Layer: 0
+  m_Name: HELP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &897552430
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 897552429}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &897552432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 897552429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d7625b5d5bb04249bd1cda7d024c935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content:
+  - text: < This do shape fall
+    font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
+    fontSize: 56
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    aligment: 4
+    offset: {x: -62.1, y: -180.82}
+  - text: This for shape rotate >
+    font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
+    fontSize: 56
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    aligment: 4
+    offset: {x: 75.7, y: -133}
+  - text: < THis two move shape l & R >
+    font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
+    fontSize: 56
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    aligment: 4
+    offset: {x: 0, y: -7.19}
+  - text: < And THis rotate level l & R >
+    font: {fileID: 12800000, guid: 1bba16f3bcc74ef47ade444e99f7449e, type: 3}
+    fontSize: 56
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    aligment: 4
+    offset: {x: 0, y: 168.2}
 --- !u!1 &908629863
 GameObject:
   m_ObjectHideFlags: 0
@@ -1158,6 +1228,7 @@ GameObject:
   - component: {fileID: 2040488248}
   - component: {fileID: 2040488250}
   - component: {fileID: 2040488252}
+  - component: {fileID: 2040488249}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1222,8 +1293,20 @@ MonoBehaviour:
     lastTime: 0
   gameState: 1
   initNewGame: 0
-  nextScores: 10
-  time: 0
+  adShow: {fileID: 0}
+  showScores: 10
+--- !u!114 &2040488249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2040488245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06117d679813a19439c61d8bd22c7a07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameId: fe804808-7f4a-4743-b3f9-f19f08f47aca
 --- !u!114 &2040488250
 MonoBehaviour:
   m_ObjectHideFlags: 0
