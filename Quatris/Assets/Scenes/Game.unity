@@ -299,7 +299,7 @@ MonoBehaviour:
   - 0.8
   - 0.1
   delay2:
-  - 0.5
+  - 0.8
 --- !u!4 &814310975
 Transform:
   m_ObjectHideFlags: 0
@@ -1218,8 +1218,12 @@ MonoBehaviour:
     currentLevel: 5
     maxLevel: 12
     speedScale: 0.8
+    speed: 0.73333335
+    lastTime: 0
   gameState: 1
   initNewGame: 0
+  nextScores: 10
+  time: 0
 --- !u!114 &2040488250
 MonoBehaviour:
   m_ObjectHideFlags: 0

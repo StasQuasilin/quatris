@@ -120,7 +120,6 @@ public class GameField : MonoBehaviour {
     }
 
     public void MoveShape(int x, int y) {
-
         hiddenShape.Set( currentShape.matrix );
         currentShape.Move( x, y );
 
