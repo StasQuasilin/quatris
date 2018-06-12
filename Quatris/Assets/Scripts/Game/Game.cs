@@ -54,16 +54,49 @@ public class Game : MonoBehaviour {
             input = gameObject.AddComponent<GameInput>();
         }
 
+<<<<<<< HEAD
+#if UNITY_EDITOR
+        if (Advertisement.isSupported) {
+            Advertisement.Initialize( gameId, false );
+        }
+#elif UNITY_ANDROID
+        if (Advertisement.isSupported) {
+            Advertisement.Initialize( gameId, false );
+        }
+#endif
+
+        Load();
+        initNextScores(10);
+    }
+    public int nextScores = 10;
+    void ShowRevardAd() {
+        if (scores.Scores >= nextScores) {
+            if (Advertisement.IsReady( "rewardedVideo" )) {
+                ShowOptions options = new ShowOptions { resultCallback = HandleShowResult };
+                Advertisement.Show( "rewardVideo", options );
+            }
+        }
+=======
         Load();
 
         adShow = FindObjectOfType<AdShow>();
         initNextScores();
         
+>>>>>>> ff369e670d4b83d5c2abedbbda30bdbd53f43b0f
     }
     public int showScores = 10;
 
+<<<<<<< HEAD
+    void initNextScores(int step) {
+        nextScores = scores.Scores + 10 + (int)(Random.value * step );
+=======
     void initNextScores() {
+<<<<<<< HEAD
         showScores = scores.Scores + 800 + (int)(Random.value * 400);
+=======
+        showScores = scores.Scores + 1000 + (int)(Random.value * 500);
+>>>>>>> ff369e670d4b83d5c2abedbbda30bdbd53f43b0f
+>>>>>>> master
     }
 
     public void ShowAd() {
