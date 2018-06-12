@@ -166,7 +166,7 @@ public class GameField : MonoBehaviour {
         if (levelWasInitialized) {
             DrawBorder();
 
-            float a = ( game.isHelp ? 0.2f : 1 );
+            float a = ( game.isHelp || game.IsPause ? 0.2f : 1 );
 
             Draw( level.levelShape.matrix, a );
             if (!reloadField || reload.Dir == -1) {

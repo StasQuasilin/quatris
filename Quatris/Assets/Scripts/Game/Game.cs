@@ -63,7 +63,7 @@ public class Game : MonoBehaviour {
     public int showScores = 10;
 
     void initNextScores() {
-        showScores = scores.Scores + 1000 + (int)(Random.value * 500);
+        showScores = scores.Scores + 800 + (int)(Random.value * 400);
     }
 
     public void ShowAd() {
