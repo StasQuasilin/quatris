@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Game\AdShow.cs" />
      <Compile Include="Assets\Scripts\Game\CustomLabel.cs" />
      <Compile Include="Assets\Scripts\Game\Game.cs" />
      <Compile Include="Assets\Scripts\Game\GameField.cs" />
@@ -63,6 +64,7 @@
      <Compile Include="Assets\Scripts\Shapes\Shapes.cs" />
      <Compile Include="Assets\Scripts\Utils\Colorizer.cs" />
      <Compile Include="Assets\Scripts\Utils\DataIO.cs" />
+     <Compile Include="Assets\Scripts\Utils\ExecuteDrawable.cs" />
      <Compile Include="Assets\Scripts\Utils\Key2D.cs" />
      <Compile Include="Assets\Scripts\Utils\LanguageBase.cs" />
      <Compile Include="Assets\Scripts\Utils\MatrixUtil.cs" />

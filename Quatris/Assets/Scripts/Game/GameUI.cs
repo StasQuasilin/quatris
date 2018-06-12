@@ -20,6 +20,7 @@ public class GameUI : MonoBehaviour {
     public ICustomLabel gameStartLabel;
     public ICustomLabel pauseLabel;
     public ICustomLabel gameOverLabel;
+    public ICustomLabel helpLabel;
 
     void Awake() {
         game = FindObjectOfType<Game>();
@@ -44,6 +45,8 @@ public class GameUI : MonoBehaviour {
 
         GUI.color = Color.white;
 
+        
+
         if (game.IsGameStart) {
             gameStartLabel.Draw();
         }
@@ -56,52 +59,50 @@ public class GameUI : MonoBehaviour {
             gameOverLabel.Draw();
         }
 
-        
-        r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 200, 20 );
+        if (game.isHelp) {
+            helpLabel.Draw();
+        } else {
+            r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 200, 20 );
 
-        /////NEXT/////
-        GUI.Label(r, "Next", labelStyle);
+            /////NEXT/////
+            GUI.Label( r, "Next", labelStyle );
 
-        r.y += betweenLabelSpace *0.75f;
+            r.y += betweenLabelSpace * 0.75f;
 
-        if (field.nextShape != null) {
-            for (int i = 0, k = 0; i < field.nextShape.xSize; i++) {
-                for (int j = 0; j < field.nextShape.ySize; j++, k++) {
+            if (field.nextShape != null) {
+                for (int i = 0, k = 0; i < field.nextShape.xSize; i++) {
+                    for (int j = 0; j < field.nextShape.ySize; j++, k++) {
 
-                    nR = new Rect(
-                        r.x + (r.width - smallCube.width * field.nextShape.xSize) / 2 + i * smallCube.width,
-                        r.y + j * smallCube.height,
-                        smallCube.width,
-                        smallCube.height);
+                        nR = new Rect(
+                            r.x + ( r.width - smallCube.width * field.nextShape.xSize ) / 2 + i * smallCube.width,
+                            r.y + j * smallCube.height,
+                            smallCube.width,
+                            smallCube.height );
 
-                    if (field.nextShape.values[k]) {
-                        GUI.DrawTexture(nR, smallCube);
+                        if (field.nextShape.values[ k ]) {
+                            GUI.DrawTexture( nR, smallCube );
+                        }
                     }
                 }
             }
-        }
 
-        r.y += 4 * smallCube.height + betweenLabelSpace * 0.05f;
-        
-        /////SCORES/////
-        GUI.Label( r, "Scores", labelStyle );
+            r.y += 4 * smallCube.height + betweenLabelSpace * 0.05f;
 
-        r.y += betweenLabelSpace / 2;
+            /////SCORES/////
+            GUI.Label( r, "Scores", labelStyle );
 
-        GUI.Label( r, scores.Scores.ToString(), labelStyle );
+            r.y += betweenLabelSpace / 2;
 
-        r.y += betweenLabelSpace;
-        
-        /////LEVEL/////
-        GUI.Label( r, "Level", labelStyle );
+            GUI.Label( r, scores.Scores.ToString(), labelStyle );
 
-        r.y += betweenLabelSpace / 2;
+            r.y += betweenLabelSpace;
 
-        GUI.Label( r, timer.currentLevel.ToString(), labelStyle );
+            /////LEVEL/////
+            GUI.Label( r, "Level", labelStyle );
 
-        if (!game.IsGameStart) {
+            r.y += betweenLabelSpace / 2;
 
-        } else if (game.IsPause) {
+            GUI.Label( r, timer.currentLevel.ToString(), labelStyle );
 
         }
     }

@@ -6,6 +6,7 @@ public class GameField : MonoBehaviour {
 
     public Sounds sounds;
     public GameFieldParameters parameters;
+    Game game;
     ScoresContainer scores;
 
     Shapes shapeFactory;
@@ -27,6 +28,8 @@ public class GameField : MonoBehaviour {
     public void InitGameField() {
 
         Debug.Log( "Init game field" );
+
+        game = FindObjectOfType<Game>();
         scores = ScoresContainer.Instance;
 
         sounds = FindObjectOfType<Sounds>();
@@ -105,11 +108,13 @@ public class GameField : MonoBehaviour {
 
         currentShape.CheckBounds();
 
-        if (currentShape.minX == 0 && currentShape.Width < currentShape.Height) {
-            currentShape.Move( 1, 0 );
-        }
-
         MatrixUtil.RotateRight( currentShape );
+
+        currentShape.CheckBounds();
+
+        if (currentShape.minX < 0) {
+            currentShape.Move( -currentShape.minX, 0 );
+        }
 
         if (level.Contain( currentShape.matrix )) {
             currentShape.Set( hiddenShape.matrix );
@@ -120,6 +125,7 @@ public class GameField : MonoBehaviour {
     }
 
     public void MoveShape(int x, int y) {
+
         hiddenShape.Set( currentShape.matrix );
         currentShape.Move( x, y );
 
@@ -159,9 +165,12 @@ public class GameField : MonoBehaviour {
     public void Draw() {
         if (levelWasInitialized) {
             DrawBorder();
-            Draw( level.levelShape.matrix, 1f );
+
+            float a = ( game.isHelp ? 0.2f : 1 );
+
+            Draw( level.levelShape.matrix, a );
             if (!reloadField || reload.Dir == -1) {
-                Draw( currentShape.matrix, 1f );
+                Draw( currentShape.matrix, a );
             }
         }
     }
