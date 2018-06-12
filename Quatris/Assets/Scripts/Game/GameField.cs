@@ -148,10 +148,14 @@ public class GameField : MonoBehaviour {
             if (drop != 0) {
                 Debug.Log( "Drop " + drop + " lines" );
                 scores.Add( drop * 3 );
-                sounds.LineDrop();
+                sounds.LineDrop(drop / parameters.width);
+            } else {
+                sounds.Fall();
             }
 
             InitCurrent();
+
+
 
         } else if (UnderFloor) {
 

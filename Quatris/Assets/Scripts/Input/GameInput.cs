@@ -78,13 +78,30 @@ public class GameInput : MonoBehaviour {
 
     public bool LevelRight() {
 
-        return b || Input.GetKeyDown(KeyCode.D);
+        if (b && bR) {
+            bR = false;
+            return b;
+        }
+
+        if (!b) {
+            bR = true;
+        }
+        return Input.GetKeyDown(KeyCode.D);
 
     }
 
     public bool LevelLeft() {
 
-        return a || Input.GetKeyDown( KeyCode.A );
+        if (a && aR) {
+            aR = false;
+            return a;
+        }
+
+        if (!a) {
+            aR = true;
+        }
+
+        return Input.GetKeyDown( KeyCode.A );
 
     }
 
@@ -116,9 +133,9 @@ public class GameInput : MonoBehaviour {
         UpArrow.GUIInput =      GUI.RepeatButton    ( r2, "Up",  buttonStyle );
         LeftArrow.GUIInput =    GUI.RepeatButton    ( r3, "Left A",  buttonStyle );
         RightArrow.GUIInput =   GUI.RepeatButton    ( r4, "Right B",  buttonStyle );
-        a =      GUI.Button    ( r5, "Left B",  buttonStyle );
-        b =      GUI.Button    ( r6, "Right B",  buttonStyle );
+        a =      GUI.RepeatButton    ( r5, "Left B",  buttonStyle );
+        b =      GUI.RepeatButton    ( r6, "Right B",  buttonStyle );
     }
 
-    bool a, b;
+    bool a, aR, b, bR;
 }

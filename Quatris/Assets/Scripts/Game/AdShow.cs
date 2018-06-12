@@ -3,9 +3,10 @@ using UnityEngine.Advertisements;
 
 public class AdShow : MonoBehaviour {
 
-    public string gameId;
+    public string gameId = "";
 
-	void Start () {
+	public void Initialize () {
+        Debug.Log( "Initialize advertisement for " + gameId );
         Advertisement.Initialize( gameId );
 	}
 
