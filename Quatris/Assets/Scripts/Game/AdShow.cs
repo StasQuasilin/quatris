@@ -6,7 +6,6 @@ public class AdShow : MonoBehaviour {
     public string gameId = "";
 
 	public void Initialize () {
-        Debug.Log( "Initialize advertisement for " + gameId );
         Advertisement.Initialize( gameId );
 	}
 

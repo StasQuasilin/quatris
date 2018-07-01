@@ -104,7 +104,7 @@ public class Game : MonoBehaviour {
 
                     Save();
 
-                } else if (gameState == GameState.pause) {
+                } else if (gameState == GameState.pause || gameState == GameState.help) {
 
                     Debug.Log( "Game continued" );
                     gameState = GameState.game;
@@ -114,7 +114,7 @@ public class Game : MonoBehaviour {
                 sounds.Pause();
             } else 
 
-            if (gameState == GameState.game && !adShow.IsShow) {
+            if ((gameState == GameState.game || gameState == GameState.help) && !adShow.IsShow) {
                 CheckInput();
 
                 int targetLevel = scores.Scores / 1000 + 1;
@@ -123,7 +123,7 @@ public class Game : MonoBehaviour {
                     timer.currentLevel = targetLevel;
                 }
 
-            } else if (gameState != GameState.pause && input.AnyKey) {
+            } else if (gameState != GameState.pause && gameState != GameState.help && input.AnyKey) {
                 GameStart();
             }
         } 
@@ -162,11 +162,12 @@ public class Game : MonoBehaviour {
         }
 
         ////////////////SHAPE FALL////////////////
+        if (gameState != GameState.help) {
+            timer.Fasta = input.ShapeFall();
 
-        timer.Fasta = input.ShapeFall();
-
-        if (timer.isTime) {
-            gameField.MoveShape( 0, 1 );
+            if (timer.isTime) {
+                gameField.MoveShape( 0, 1 );
+            }
         }
     }
 
@@ -178,9 +179,14 @@ public class Game : MonoBehaviour {
             Debug.Log( "Init new game" );
 
             gameField.ReloadField();
+
+            if (scores.Scores > 0) {
+                Manager.Restart( scores.Scores );
+            }
             scores.Scores = 0;
             initNextScores();
             initNewGame = false;
+
 
 
         } else {

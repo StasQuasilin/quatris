@@ -30,7 +30,7 @@ public class PauseMenu : ICustomLabel {
 	public override void Draw() {
 
 
-        buttonRect = new Rect((Screen.width - buttonWidth) / 2, (Screen.height - (buttoneHeight * 3) - buttonSpace * 1) / 2, buttonWidth, buttoneHeight);
+        buttonRect = new Rect((Screen.width - buttonWidth) / 2, (Screen.height - (buttoneHeight * 4) - buttonSpace * 2) / 2, buttonWidth, buttoneHeight);
 
         if (GUI.Button(buttonRect, "Help!", style)) {
             game.gameState = Game.GameState.help;
@@ -45,7 +45,13 @@ public class PauseMenu : ICustomLabel {
 
         buttonRect.y += buttoneHeight + buttonSpace;
 
-        if(GUI.Button(buttonRect, "Exit", style)) {
+        if (GUI.Button(buttonRect, "Leaders", style)) {
+            PlayGame.ShowLeaderboardUI();
+        }
+
+        buttonRect.y += buttoneHeight + buttonSpace;
+
+        if (GUI.Button(buttonRect, "Exit", style)) {
             Application.Quit();
         }
 
