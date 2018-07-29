@@ -168,7 +168,9 @@ public class GameField : MonoBehaviour {
     
     public void Draw() {
         if (levelWasInitialized) {
-            DrawBorder();
+			if (ScreeUtil.isLandscape()) {
+				DrawBorder ();
+			}
 
             float a = ( game.isHelp || game.IsPause ? 0.2f : 1 );
 
@@ -180,36 +182,34 @@ public class GameField : MonoBehaviour {
     }
 
     public void DrawBorder() {
-        GUI.DrawTexture( parameters.borderRect, parameters.border );
+        //GUI.DrawTexture( parameters.borderRect, parameters.border );
     }
 
     Color drawColor = Color.white;
 
 	public void Draw(Dictionary<Key2D, Color> matrix, float alpha) {
 
-        GUI.BeginGroup( groupRect );
+		GUI.BeginGroup( parameters.GroupRect );
+
+		for (int i = 0; i < parameters.width; i++) {
+			for (int j = 0; j < parameters.height; j++) {
+				if (matrix.ContainsKey(new Key2D(i, j))) {
+					drawColor.a = 1f;
+				} else {
+					drawColor.a = 0.01f;
+				}
+
+				GUI.color = drawColor;
+
+				cubeRect.x = i * parameters.cubeTexture.width * scale;
+				cubeRect.y = j * parameters.cubeTexture.height * scale;
+
+				GUI.DrawTexture( cubeRect, parameters.cubeTexture );
+			}
+
+
+		}
         
-        foreach (var pair in matrix) {
-
-            if (
-                pair.Key.x >= 0 && 
-                pair.Key.x <= parameters.width - 1 && 
-                pair.Key.y <= parameters.height) {
-                
-                drawColor.r = pair.Value.r;
-                drawColor.g = pair.Value.g;
-                drawColor.b = pair.Value.b;
-                drawColor.a = alpha;
-
-                GUI.color = drawColor;
-
-                cubeRect.x = pair.Key.x * parameters.cubeTexture.width * scale;
-                cubeRect.y = pair.Key.y * parameters.cubeTexture.height * scale;
-
-                GUI.DrawTexture( cubeRect, parameters.cubeTexture );
-            }
-        }
-
         GUI.EndGroup();
 
     }
@@ -273,8 +273,7 @@ public class GameFieldParameters {
         } else {
             height = width * Screen.height / Screen.width;
         }
-
-        InitBorder();
+		//InitBorder ();
     }
 
     void InitBorder() {
@@ -303,7 +302,11 @@ public class GameFieldParameters {
 
     public float Scale {
         get {
-            return 1f * ( Screen.height - borderWidth * 2 ) / ( height * cubeTexture.height ); ;
+			if (ScreeUtil.isLandscape()) {
+				return 1f * (Screen.height - borderWidth * 2) / (height * cubeTexture.height);
+			} else {
+				return 1f * Screen.width / width * cubeTexture.width;
+			}
         }
     }
 
@@ -315,7 +318,11 @@ public class GameFieldParameters {
 
     public Rect GroupRect {
         get {
-            return new Rect( ( Screen.width - width * cubeTexture.width * Scale ) / 2, borderWidth, width * cubeTexture.width * Scale, Screen.height - borderWidth );
+			if (ScreeUtil.isLandscape()) {
+				return new Rect ((Screen.width - width * cubeTexture.width * Scale) / 2, borderWidth, width * cubeTexture.width * Scale, Screen.height - borderWidth);
+			} else {
+				return new Rect (0, 0, width * cubeTexture.width * Scale, height * cubeTexture.height * Scale);
+			}
         }
     }
 }

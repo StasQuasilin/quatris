@@ -33,25 +33,34 @@ public class GameInput : MonoBehaviour {
         buttonStyle.normal.background = ButtonNormalTexture;
         buttonStyle.active.background = ButtonPressedTexture;
 
-        int w = (int)(1f * Screen.height / 3);
-        Rect lR = new Rect( 0, Screen.height - w, w, w );
-        Rect rR = new Rect( Screen.width - w, Screen.height - w, w, w );
-
-        r5 = new Rect( lR );
-        r6 = new Rect( rR );
-
-        lR.y -= w;
-        rR.y -= w;
-
-        r3 = new Rect( lR );
-        r4 = new Rect( rR );
-
-        lR.y -= w;
-        rR.y -= w;
-
-        r1 = new Rect( lR );
-        r2 = new Rect( rR );
     }
+
+	void CalcRects() {
+		int w;
+		if (ScreeUtil.isLandscape()) {
+			w = (int)(1f * Screen.height / 3);
+		} else {
+			w = (int)(1f * Screen.width / 3);
+		}
+			
+		Rect lR = new Rect( 0, Screen.height - w, w, w );
+		Rect rR = new Rect( Screen.width - w, Screen.height - w, w, w );
+
+		r5 = new Rect( lR );
+		r6 = new Rect( rR );
+
+		lR.y -= w;
+		rR.y -= w;
+
+		r3 = new Rect( lR );
+		r4 = new Rect( rR );
+
+		lR.y -= w;
+		rR.y -= w;
+
+		r1 = new Rect( lR );
+		r2 = new Rect( rR );
+	}
 
 	public bool ShapeLeft() {
 
@@ -118,23 +127,18 @@ public class GameInput : MonoBehaviour {
     }
 
     Rect r1, r2, r3, r4, r5, r6;
-    Color color = Color.white;
-    void OnGUI() {
 
-        if (Screen.orientation == ScreenOrientation.Portrait) {
-            color.a = 0.2f;
-        } else {
-            color.a = 1f;
-        }
+	void OnGUI() {
+		if (Game.instance.gameState == Game.GameState.game) {
+			CalcRects ();
 
-        GUI.color = color;
-
-        shapeFall =             GUI.RepeatButton    ( r1, "Down",   buttonStyle );
-        UpArrow.GUIInput =      GUI.RepeatButton    ( r2, "Up",  buttonStyle );
-        LeftArrow.GUIInput =    GUI.RepeatButton    ( r3, "Left A",  buttonStyle );
-        RightArrow.GUIInput =   GUI.RepeatButton    ( r4, "Right B",  buttonStyle );
-        a =      GUI.RepeatButton    ( r5, "Left B",  buttonStyle );
-        b =      GUI.RepeatButton    ( r6, "Right B",  buttonStyle );
+			shapeFall = GUI.RepeatButton (r1, "Down", buttonStyle);
+			UpArrow.GUIInput = GUI.RepeatButton (r2, "Up", buttonStyle);
+			LeftArrow.GUIInput = GUI.RepeatButton (r3, "Left A", buttonStyle);
+			RightArrow.GUIInput = GUI.RepeatButton (r4, "Right B", buttonStyle);
+			a = GUI.RepeatButton (r5, "Left B", buttonStyle);
+			b = GUI.RepeatButton (r6, "Right B", buttonStyle);
+		}
     }
 
     bool a, aR, b, bR;

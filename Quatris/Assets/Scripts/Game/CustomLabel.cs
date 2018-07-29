@@ -30,10 +30,12 @@ public class CustomLabel : ICustomLabel {
 
         public Content() {
             style = new GUIStyle();
-            r = new Rect( 0, 0, Screen.width, Screen.height );
+            
         }
 
         void Update() {
+
+			r = new Rect( 0, 0, Screen.width, Screen.height );
 
             if (style.font != font) {
                 style.font = font;

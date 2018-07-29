@@ -236,6 +236,7 @@
      <Compile Include="Assets\Scripts\Game\GameUI.cs" />
      <Compile Include="Assets\Scripts\Game\ICustomLabel.cs" />
      <Compile Include="Assets\Scripts\Game\Level.cs" />
+     <Compile Include="Assets\Scripts\Game\NewGUI.cs" />
      <Compile Include="Assets\Scripts\Game\PauseMenu.cs" />
      <Compile Include="Assets\Scripts\Game\SoundRepeater.cs" />
      <Compile Include="Assets\Scripts\Game\Sounds.cs" />
@@ -243,6 +244,11 @@
      <Compile Include="Assets\Scripts\GooglePlay\PlayGame.cs" />
      <Compile Include="Assets\Scripts\Input\GameButton.cs" />
      <Compile Include="Assets\Scripts\Input\GameInput.cs" />
+     <Compile Include="Assets\Scripts\Localization\LocalizationData.cs" />
+     <Compile Include="Assets\Scripts\Localization\LocalizationManager.cs" />
+     <Compile Include="Assets\Scripts\Localization\LocalizedTextEditor.cs" />
+     <Compile Include="Assets\Scripts\Localization\StarupManager.cs" />
+     <Compile Include="Assets\Scripts\NewField.cs" />
      <Compile Include="Assets\Scripts\Shapes\IShape.cs" />
      <Compile Include="Assets\Scripts\Shapes\LevelShape.cs" />
      <Compile Include="Assets\Scripts\Shapes\Shape.cs" />
@@ -254,9 +260,11 @@
      <Compile Include="Assets\Scripts\Utils\LanguageBase.cs" />
      <Compile Include="Assets\Scripts\Utils\MatrixUtil.cs" />
      <Compile Include="Assets\Scripts\Utils\ScoresContainer.cs" />
+     <Compile Include="Assets\Scripts\Utils\ScreeUtil.cs" />
      <Compile Include="Assets\Scripts\Utils\ShapeEditor.cs" />
      <None Include="Assets\Plugins\Android\com.google.android.gms.play-services-auth-api-phone-license-11.6.2\third_party_licenses.txt" />
      <None Include="Assets\GooglePlayGames\Editor\GooglePlayGamesPluginDependencies.xml" />
+     <None Include="Assets\Resources\Fonts\pizzadude.dk License.txt" />
      <None Include="Assets\Plugins\Android\com.google.android.gms.play-services-nearby-license-11.6.2\third_party_licenses.txt" />
      <None Include="Assets\Plugins\Android\com.google.games.gpgs-plugin-support-0.9.50\res\values-v14\values-v14.xml" />
      <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />

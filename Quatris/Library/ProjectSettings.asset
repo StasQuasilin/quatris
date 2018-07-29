@@ -143,7 +143,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.quasilin.quatris
   buildNumber: {}
-  AndroidBundleVersionCode: 2
+  AndroidBundleVersionCode: 3
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -224,8 +224,8 @@ PlayerSettings:
   AndroidTargetDevice: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/dev/unity/Quatris/Quatris/user.keystore
-  AndroidKeyaliasName: 1
+  AndroidKeystoreName: D:/Dev/unity/quatris/Quatris/user.keystore
+  AndroidKeyaliasName: 
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
   androidEnableBanner: 1

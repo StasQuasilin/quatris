@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 6e649e3f356e77549928cc1410853684
+timeCreated: 1532808083
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Digital dream Fat Narrow
+  fontNames:
+  - Digital dream Fat Narrow
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

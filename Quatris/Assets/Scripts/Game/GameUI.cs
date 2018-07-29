@@ -17,10 +17,7 @@ public class GameUI : MonoBehaviour {
     Game game;
     GameField field;
 
-    public ICustomLabel gameStartLabel;
     public ICustomLabel pauseLabel;
-    public ICustomLabel gameOverLabel;
-    public ICustomLabel helpLabel;
 
     void Awake() {
         game = FindObjectOfType<Game>();
@@ -45,24 +42,14 @@ public class GameUI : MonoBehaviour {
 
         GUI.color = Color.white;
 
-        
-
-        if (game.IsGameStart) {
-            gameStartLabel.Draw();
-        }
-
-        if (game.IsPause) {
-            pauseLabel.Draw();
-        }
-
-        if (game.IsGameOver) {
-            gameOverLabel.Draw();
-        }
-
-        if (game.isHelp) {
-            helpLabel.Draw();
+		if (game.IsPause) {
+			pauseLabel.Draw ();
         } else {
-            r = new Rect( field.groupRect.x + field.groupRect.width + 15, 15, 200, 20 );
+			if (ScreeUtil.isLandscape()) {
+				r = new Rect (field.groupRect.x + field.groupRect.width + 15, 15, 200, 20);
+			} else {
+				r = new Rect (field.groupRect.x + field.groupRect.width -215, 15, 200, 20);
+			}
 
             /////NEXT/////
             GUI.Label( r, "Next", labelStyle );

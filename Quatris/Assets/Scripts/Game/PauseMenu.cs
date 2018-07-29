@@ -6,20 +6,23 @@ public class PauseMenu : ICustomLabel {
     public Font font;
     private GUIStyle style;
     Game game;
+	LocalizationManager local;
     Sounds sounds;
+	public Color menuColor = Color.white;
 
     void Awake() {
         sounds = FindObjectOfType<Sounds>();
         style = new GUIStyle();
         style.font = font;
         style.fontSize = 56;
-        style.normal.textColor = Color.white;
-        style.active.textColor = Color.white;
+		style.normal.textColor = menuColor;
+		style.active.textColor = menuColor;
         style.alignment = TextAnchor.MiddleCenter;
     }
 
     void Start() {
         game = Game.instance;
+		local = LocalizationManager.instance;
     }
 
     Rect buttonRect;
@@ -32,26 +35,26 @@ public class PauseMenu : ICustomLabel {
 
         buttonRect = new Rect((Screen.width - buttonWidth) / 2, (Screen.height - (buttoneHeight * 4) - buttonSpace * 2) / 2, buttonWidth, buttoneHeight);
 
-        if (GUI.Button(buttonRect, "Help!", style)) {
+		if (GUI.Button(buttonRect, local.GetLocalizedValue("help"), style)) {
             game.gameState = Game.GameState.help;
         }
 
         buttonRect.y += buttoneHeight + buttonSpace;
 
-        if (GUI.Button(buttonRect, "Continue", style)) {
+		if (GUI.Button(buttonRect, local.GetLocalizedValue("continue"), style)) {
             game.gameState = Game.GameState.game;
             sounds.Pause();
         }
 
         buttonRect.y += buttoneHeight + buttonSpace;
 
-        if (GUI.Button(buttonRect, "Leaders", style)) {
+		if (GUI.Button(buttonRect, local.GetLocalizedValue("leaders"), style)) {
             PlayGame.ShowLeaderboardUI();
         }
 
         buttonRect.y += buttoneHeight + buttonSpace;
 
-        if (GUI.Button(buttonRect, "Exit", style)) {
+		if (GUI.Button(buttonRect, local.GetLocalizedValue("exit"), style)) {
             Application.Quit();
         }
 
